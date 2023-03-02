@@ -9,12 +9,13 @@ import * as styles from './GameReport.module.scss';
 interface StopwatchProps {
 	time: number;
 	totalTime: number;
+	strokeColor: string;
 }
 
 const autonLength = 15 * 1000;
 const gameLength = 150 * 1000;
 
-export const Stopwatch: React.FC<StopwatchProps> = ({ time, totalTime }) => (
+export const Stopwatch: React.FC<StopwatchProps> = ({ time, totalTime, strokeColor }) => (
 	<>
 		<p>
 			{Math.floor(time / (1000 * 60))}m {((time / 1000) % 60).toFixed(1)}s
@@ -24,6 +25,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ time, totalTime }) => (
 			strokeWidth={8}
 			trailWidth={8}
 			strokeLinecap="square"
+			strokeColor={strokeColor}
 		/>
 	</>
 );
@@ -34,10 +36,6 @@ export const GameReport: React.FC = () => {
 
 	const events = useAppSelector(selectEvents);
 
-	// if an auton event has been fired or if 15 seconds have elapsed
-	const autonOver =
-		events.find((event) => event.type === ReportEventType.Auton) !== undefined ||
-		time > autonLength;
 	// if 2 minutes 30 seconds have elapsed
 	const gameOver = time > gameLength;
 
@@ -59,132 +57,120 @@ export const GameReport: React.FC = () => {
 	return (
 		<div className={styles.game}>
 			<div>
-				<Stopwatch time={time} totalTime={autonOver ? gameLength : autonLength} />
-				{autonOver ? (
+				<Stopwatch
+					time={time}
+					totalTime={gameLength}
+					strokeColor={time < autonLength ? '#cb3d3b' : '#4979db'}
+				/>
+				<input
+					type="button"
+					onClick={() => dispatch(undoEvent())}
+					value="Undo"
+					disabled={events.length === 0}
+				/>
+			</div>
+			<div>
+				<div>
 					<input
 						type="button"
-						onClick={() => dispatch(undoEvent())}
-						value="Undo"
-						disabled={events.length === 0}
+						onClick={() =>
+							dispatch(
+								addEvent({
+									time,
+									type: ReportEventType.Pickup,
+									piece: 'box'
+								})
+							)
+						}
+						disabled={engaged !== undefined}
+						value={`Box${
+							pieceHeld !== undefined ? ` (drop last ${pieceHeld.piece})` : ''
+						}`}
 					/>
-				) : null}
+					<input
+						type="button"
+						onClick={() =>
+							dispatch(
+								addEvent({
+									time,
+									type: ReportEventType.Pickup,
+									piece: 'cone'
+								})
+							)
+						}
+						disabled={engaged !== undefined}
+						value={`Cone${
+							pieceHeld !== undefined ? ` (drop last ${pieceHeld.piece})` : ''
+						}`}
+					/>
+				</div>
+				<div>
+					<input
+						type="button"
+						onClick={() =>
+							dispatch(
+								addEvent({
+									time,
+									type: ReportEventType.Score,
+									row: 1
+								})
+							)
+						}
+						disabled={pieceHeld === undefined || engaged !== undefined}
+						value="1"
+					/>
+					<input
+						type="button"
+						onClick={() =>
+							dispatch(
+								addEvent({
+									time,
+									type: ReportEventType.Score,
+									row: 2
+								})
+							)
+						}
+						disabled={pieceHeld === undefined || engaged !== undefined}
+						value="2"
+					/>
+					<input
+						type="button"
+						onClick={() =>
+							dispatch(
+								addEvent({
+									time,
+									type: ReportEventType.Score,
+									row: 3
+								})
+							)
+						}
+						disabled={pieceHeld === undefined || engaged !== undefined}
+						value="3"
+					/>
+				</div>
+				<div>
+					<input
+						type="button"
+						onClick={() =>
+							dispatch(
+								addEvent({
+									time,
+									type: ReportEventType.Docking,
+									engaged: !engaged
+								})
+							)
+						}
+						/* if we haven't docked yet, do that. otherwise, toggle engage state */
+						value={engaged === undefined ? 'Dock' : engaged ? 'Disengage' : 'Engage'}
+					/>
+					<input
+						type="button"
+						onClick={() => dispatch(finishGame())}
+						value="End game"
+						disabled={!gameOver}
+					/>
+				</div>
 			</div>
-			{autonOver ? (
-				<div>
-					<div>
-						<input
-							type="button"
-							onClick={() =>
-								dispatch(
-									addEvent({
-										time,
-										type: ReportEventType.Pickup,
-										piece: 'box'
-									})
-								)
-							}
-							value={`Box${
-								pieceHeld !== undefined ? ` (drop last ${pieceHeld.piece})` : ''
-							}`}
-						/>
-						<input
-							type="button"
-							onClick={() =>
-								dispatch(
-									addEvent({
-										time,
-										type: ReportEventType.Pickup,
-										piece: 'cone'
-									})
-								)
-							}
-							value={`Cone${
-								pieceHeld !== undefined ? ` (drop last ${pieceHeld.piece})` : ''
-							}`}
-						/>
-					</div>
-					<div>
-						<input
-							type="button"
-							onClick={() =>
-								dispatch(
-									addEvent({
-										time,
-										type: ReportEventType.Score,
-										row: 1
-									})
-								)
-							}
-							disabled={pieceHeld === undefined}
-							value="1"
-						/>
-						<input
-							type="button"
-							onClick={() =>
-								dispatch(
-									addEvent({
-										time,
-										type: ReportEventType.Score,
-										row: 2
-									})
-								)
-							}
-							disabled={pieceHeld === undefined}
-							value="2"
-						/>
-						<input
-							type="button"
-							onClick={() =>
-								dispatch(
-									addEvent({
-										time,
-										type: ReportEventType.Score,
-										row: 3
-									})
-								)
-							}
-							disabled={pieceHeld === undefined}
-							value="3"
-						/>
-					</div>
-					<div>
-						<input
-							type="button"
-							onClick={() =>
-								dispatch(
-									addEvent({
-										time,
-										type: ReportEventType.Docking,
-										engaged: !engaged
-									})
-								)
-							}
-							/* if we haven't docked yet, do that. otherwise, toggle engage state */
-							value={
-								engaged === undefined ? 'Dock' : engaged ? 'Disengage' : 'Engage'
-							}
-						/>
-						<input
-							type="button"
-							onClick={() => dispatch(finishGame())}
-							value="End game"
-							disabled={!gameOver}
-						/>
-					</div>
-				</div>
-			) : (
-				<div>
-					<div>
-						<input
-							type="button"
-							onClick={() =>
-								dispatch(addEvent({ time, type: ReportEventType.Auton }))
-							}
-							value="Auton"
-						/>
-					</div>
-				</div>
-			)}
 		</div>
 	);
 };
