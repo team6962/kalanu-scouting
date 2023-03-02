@@ -1,3 +1,5 @@
+@import '../vars.scss';
+
 .report {
 	width: min(640px, calc(100vw - 2rem));
 	display: flex;
@@ -8,7 +10,7 @@
 		margin: 0;
 		padding: 0rem 1rem;
 		border-radius: 0.25rem;
-		border: 1px solid black;
+		border: 1px solid $black;
 		box-sizing: border-box;
 		height: 50px;
 
@@ -16,14 +18,15 @@
 		align-items: center;
 		justify-content: center;
 
-		&[type='button'] {
-			background-color: rgba(0, 0, 0, 0.1);
-		}
+		transition-property: filter, transform;
+		transition-duration: 0.2s;
 
-		&:disabled {
-			color: rgba(0, 0, 0, 0.4);
-			border-color: rgba(0, 0, 0, 0.4);
-			background-color: rgba(0, 0, 0, 0.05);
+		&[type='button'] {
+			background-color: $light;
+
+			&:active:not(:disabled) {
+				transform: scale(1.05);
+			}
 		}
 	}
 

@@ -1,3 +1,5 @@
+@import '../vars.scss';
+
 .pregame {
 	display: flex;
 	flex-direction: column;
@@ -25,19 +27,19 @@
 					margin: 0;
 					border-radius: 0.5rem;
 					overflow: hidden;
-					border: 1px solid black;
+					border: 1px solid $black;
 
 					> li {
 						padding: 0.5rem;
 						cursor: pointer;
 
 						&:not(:last-child) {
-							border-bottom: 1px solid black;
+							border-bottom: 1px solid $black;
 						}
 
 						&.active,
 						&.hover {
-							background-color: rgba(0, 0, 0, 0.1);
+							background-color: $light;
 						}
 
 						&.active {

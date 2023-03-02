@@ -26,6 +26,7 @@ export const Stopwatch: React.FC<StopwatchProps> = ({ time, totalTime, strokeCol
 			trailWidth={8}
 			strokeLinecap="square"
 			strokeColor={strokeColor}
+			trailColor={'#d8dada'}
 		/>
 	</>
 );
@@ -83,9 +84,7 @@ export const GameReport: React.FC = () => {
 							)
 						}
 						disabled={engaged !== undefined}
-						value={`Box${
-							pieceHeld !== undefined ? ` (drop last ${pieceHeld.piece})` : ''
-						}`}
+						value={`box${pieceHeld !== undefined ? ` (drop ${pieceHeld.piece})` : ''}`}
 					/>
 					<input
 						type="button"
@@ -99,9 +98,7 @@ export const GameReport: React.FC = () => {
 							)
 						}
 						disabled={engaged !== undefined}
-						value={`Cone${
-							pieceHeld !== undefined ? ` (drop last ${pieceHeld.piece})` : ''
-						}`}
+						value={`cone${pieceHeld !== undefined ? ` (drop ${pieceHeld.piece})` : ''}`}
 					/>
 				</div>
 				<div>

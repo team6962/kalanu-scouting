@@ -1,4 +1,5 @@
 @import url('https://use.typekit.net/zsi8dan.css');
+@import './vars.scss';
 
 body {
 	margin: 0;
@@ -8,5 +9,11 @@ body {
 * {
 	font-size: 18px;
 	font-family: corporate-s, sans-serif;
-	color: black;
+
+	color: $black;
+	background-color: $white;
+}
+
+:disabled {
+	filter: blur(2px);
 }
