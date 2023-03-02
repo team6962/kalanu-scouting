@@ -8,11 +8,11 @@ import { Combobox } from './Combobox';
 import * as styles from './PregameReport.module.scss';
 
 const matchLevels: Record<string, string> = {
-	qm: 'quals',
-	ef: 'match',
-	qf: 'quarters',
-	sf: 'semis',
-	f: 'finals'
+	qm: 'Quals',
+	ef: 'Match',
+	qf: 'Quarters',
+	sf: 'Semis',
+	f: 'Finals'
 };
 
 export const PregameReport: React.FC = () => {
@@ -63,7 +63,7 @@ export const PregameReport: React.FC = () => {
 						match === null
 							? ''
 							: `${matchLevels[match.comp_level]} ${match.match_number}${
-									match.comp_level !== 'qm' ? ` match ${match.set_number}` : ''
+									match.comp_level !== 'qm' ? ` Match ${match.set_number}` : ''
 							  }`
 					}
 					itemToKey={(match) => match.key}
