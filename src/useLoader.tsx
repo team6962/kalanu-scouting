@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MatchApi, MatchSimple, TeamApi, TeamSimple } from 'tba-api-client-typescript';
-import { config } from './api/config';
+import { getEventMatchesSimple, getEventTeamsSimple } from './api/api';
 import { useAppDispatch } from './state/hooks';
 import { loadMatches, loadTeams } from './state/slices/offlineSlice';
 
@@ -15,17 +14,12 @@ export const useLoader = (): [boolean, Error[]] => {
 	const handleError = (e: Error) => setErrors((errors) => [...errors, e]);
 
 	useEffect(() => {
-		const matchApi = new MatchApi(config, 'https://www.thebluealliance.com/api/v3', fetch);
-		const teamApi = new TeamApi(config, 'https://www.thebluealliance.com/api/v3', fetch);
-
-		const matchPromise = matchApi
-			.getEventMatchesSimple(eventCode)
-			.catch(handleError)
-			.then((matches) => dispatch(loadMatches(matches as MatchSimple[])));
-		const teamPromise = teamApi
-			.getEventTeamsSimple(eventCode)
-			.catch(handleError)
-			.then((teams) => dispatch(loadTeams(teams as TeamSimple[])));
+		const matchPromise = getEventMatchesSimple(eventCode)
+			.then((matches) => dispatch(loadMatches(matches!)))
+			.catch(handleError);
+		const teamPromise = getEventTeamsSimple(eventCode)
+			.then((teams) => dispatch(loadTeams(teams!)))
+			.catch(handleError);
 
 		Promise.allSettled([matchPromise, teamPromise]).finally(() => setLoading(false));
 	}, [loading]);

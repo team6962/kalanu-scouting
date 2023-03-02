@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MatchSimple, TeamSimple } from 'tba-api-client-typescript';
+import { MatchSimple, TeamSimple } from '../../api/types';
 import { Report } from '../Report';
 import { RootState } from '../store';
 import { createSelector } from '@reduxjs/toolkit';

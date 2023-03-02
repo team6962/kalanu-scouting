@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { startGame } from '../state/slices/reportSlice';
 import { selectMatches, selectTeams } from '../state/slices/offlineSlice';
-import { MatchSimple, TeamSimple } from 'tba-api-client-typescript';
+import { MatchSimple, TeamSimple } from '../api/types';
 import { Combobox } from './Combobox';
 
 import * as styles from './PregameReport.module.scss';
