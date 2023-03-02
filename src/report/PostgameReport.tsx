@@ -4,6 +4,8 @@ import { selectReport, setPostgameInfo, startPregame } from '../state/slices/rep
 import { addReport } from '../state/slices/offlineSlice';
 import { store } from '../state/store';
 
+import * as styles from './PostgameReport.module.scss';
+
 export const PostgameReport: React.FC = () => {
 	const dispatch = useAppDispatch();
 
@@ -32,7 +34,7 @@ export const PostgameReport: React.FC = () => {
 	};
 
 	return (
-		<div>
+		<div className={styles.postgame}>
 			<div>
 				<label>
 					<input
@@ -40,7 +42,7 @@ export const PostgameReport: React.FC = () => {
 						checked={fouled}
 						onChange={(e) => setFouled(e.target.checked)}
 					/>
-					Fouled?
+					<span>Fouled?</span>
 				</label>
 				<label>
 					<input
@@ -48,13 +50,14 @@ export const PostgameReport: React.FC = () => {
 						checked={parked}
 						onChange={(e) => setParked(e.target.checked)}
 					/>
-					Parked?
+					<span>Parked?</span>
 				</label>
 			</div>
-			<label>
-				Notes:
-				<textarea value={notes} onChange={(e) => setNotes(e.target.value)}></textarea>
-			</label>
+			<textarea
+				placeholder="Notes"
+				value={notes}
+				onChange={(e) => setNotes(e.target.value)}
+			></textarea>
 			<input
 				type="button"
 				onClick={submitHandler}
