@@ -8,11 +8,11 @@ import { Combobox } from './Combobox';
 import * as styles from './PregameReport.module.scss';
 
 const matchLevels: Record<string, string> = {
-	qm: 'Quals',
-	ef: 'Unknown Match Type',
-	qf: 'Quarters',
-	sf: 'Semis',
-	f: 'Finals'
+	qm: 'quals',
+	ef: 'match',
+	qf: 'quarters',
+	sf: 'semis',
+	f: 'finals'
 };
 
 export const PregameReport: React.FC = () => {
@@ -63,11 +63,11 @@ export const PregameReport: React.FC = () => {
 						match === null
 							? ''
 							: `${matchLevels[match.comp_level]} ${match.match_number}${
-									match.comp_level !== 'qm' ? ` Match ${match.set_number}` : ''
+									match.comp_level !== 'qm' ? ` match ${match.set_number}` : ''
 							  }`
 					}
 					itemToKey={(match) => match.key}
-					placeholder={'Match'}
+					placeholder={'match'}
 					hoverClass={styles.hover}
 					activeClass={styles.active}
 				/>
@@ -99,7 +99,7 @@ export const PregameReport: React.FC = () => {
 						team === null ? '' : `${team.team_number}: ${team.nickname}`
 					}
 					itemToKey={(team) => team.team_number}
-					placeholder={'Team'}
+					placeholder={'team'}
 					hoverClass={styles.hover}
 					activeClass={styles.active}
 				/>
@@ -107,7 +107,7 @@ export const PregameReport: React.FC = () => {
 			<input
 				type="button"
 				onClick={startHandler}
-				value="Start match"
+				value="start match"
 				disabled={team === null || match === null}
 			/>
 		</div>

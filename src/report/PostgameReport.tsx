@@ -54,7 +54,7 @@ export const PostgameReport: React.FC = () => {
 				</label>
 			</div>
 			<textarea
-				placeholder="Notes"
+				placeholder="notes"
 				value={notes}
 				onChange={(e) => setNotes(e.target.value)}
 			></textarea>
@@ -62,7 +62,7 @@ export const PostgameReport: React.FC = () => {
 				type="button"
 				onClick={submitHandler}
 				disabled={submitted}
-				value={submitted ? 'Report submitted' : 'Submit report'}
+				value={submitted ? 'report submitted' : 'submit report'}
 			/>
 		</div>
 	);

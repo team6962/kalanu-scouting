@@ -65,7 +65,7 @@ export const GameReport: React.FC = () => {
 				<input
 					type="button"
 					onClick={() => dispatch(undoEvent())}
-					value="Undo"
+					value="undo"
 					disabled={events.length === 0}
 				/>
 			</div>
@@ -161,12 +161,12 @@ export const GameReport: React.FC = () => {
 							)
 						}
 						/* if we haven't docked yet, do that. otherwise, toggle engage state */
-						value={engaged === undefined ? 'Dock' : engaged ? 'Disengage' : 'Engage'}
+						value={engaged === undefined ? 'dock' : engaged ? 'disengage' : 'engage'}
 					/>
 					<input
 						type="button"
 						onClick={() => dispatch(finishGame())}
-						value="End game"
+						value="end game"
 						disabled={!gameOver}
 					/>
 				</div>
