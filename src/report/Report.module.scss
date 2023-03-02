@@ -1,0 +1,33 @@
+.report {
+	width: min(640px, calc(100vw - 2rem));
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	input {
+		margin: 0;
+		padding: 0rem 1rem;
+		border-radius: 0.25rem;
+		border: 1px solid black;
+		box-sizing: border-box;
+		height: 50px;
+
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+
+		&[type='button'] {
+			background-color: rgba(0, 0, 0, 0.1);
+		}
+
+		&:disabled {
+			color: rgba(0, 0, 0, 0.4);
+			border-color: rgba(0, 0, 0, 0.4);
+			background-color: rgba(0, 0, 0, 0.05);
+		}
+	}
+
+	p {
+		margin: 0;
+	}
+}
