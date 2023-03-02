@@ -10,6 +10,8 @@ Current features:
 
 Roadmap:
 
+-   Feedback for piece dropping
+-   Limit options while docked
 -   Rewritten Swagger parsing
 -   Future-proofed-ish frontend config
 -   Backend dashboard
