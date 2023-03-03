@@ -1,17 +1,17 @@
 // simple match stuff
 export namespace MatchSimple {
 	export enum CompLevelEnum {
-		Qm = <any>'qm',
-		Ef = <any>'ef',
-		Qf = <any>'qf',
-		Sf = <any>'sf',
-		F = <any>'f'
+		Quals = 'qm',
+		Match = 'ef',
+		Quarters = 'qf',
+		Semis = 'sf',
+		Finals = 'f'
 	}
 
 	export enum WinningAllianceEnum {
-		Red = <any>'red',
-		Blue = <any>'blue',
-		Empty = <any>''
+		Red = 'red',
+		Blue = 'blue',
+		Empty = ''
 	}
 }
 
@@ -106,7 +106,7 @@ export interface TeamSimple {
 	/**
 	 * State of team derived from parsing the address registered with FIRST.
 	 */
-	stateProv?: string;
+	state_prov?: string;
 	/**
 	 * Country of team derived from parsing the address registered with FIRST.
 	 */
