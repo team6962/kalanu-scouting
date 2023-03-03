@@ -90,7 +90,7 @@ export interface TeamSimple {
 	/**
 	 * Official team number issued by FIRST.
 	 */
-	teamNumber: number;
+	team_number: number;
 	/**
 	 * Team nickname provided by FIRST.
 	 */

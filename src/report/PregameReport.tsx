@@ -67,6 +67,10 @@ export const PregameReport: React.FC = () => {
 							  }`
 					}
 					itemToKey={(match) => match.key}
+					sortFn={(a: MatchSimple, b: MatchSimple) =>
+						(a.actual_time || a.predicted_time || a.time || 0) -
+						(b.actual_time || b.predicted_time || b.time || 0)
+					}
 					placeholder={'match'}
 					hoverClass={styles.hover}
 					activeClass={styles.active}
@@ -95,10 +99,21 @@ export const PregameReport: React.FC = () => {
 								);
 						return matchDefined ? teamInMatch && matchesSearch : matchesSearch;
 					}}
-					itemToString={(team) =>
+					itemToString={(team: TeamSimple) =>
 						team === null ? '' : `${team.team_number}: ${team.nickname}`
 					}
+					itemVis={(team: TeamSimple) => {
+						if (team === null) return '';
+						const teamString = `${team.team_number}: ${team.nickname}`;
+						if (match === null || match.alliances === undefined) return teamString;
+						if (match.alliances.blue?.team_keys!.includes(team.key))
+							return <span className={styles.blue}>{teamString}</span>;
+						if (match.alliances.red?.team_keys!.includes(team.key))
+							return <span className={styles.red}>{teamString}</span>;
+						return teamString;
+					}}
 					itemToKey={(team) => team.team_number}
+					sortFn={(a: TeamSimple, b: TeamSimple) => a.team_number - b.team_number}
 					placeholder={'team'}
 					hoverClass={styles.hover}
 					activeClass={styles.active}

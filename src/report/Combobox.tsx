@@ -1,5 +1,5 @@
 import Downshift from 'downshift';
-import { Key } from 'react';
+import { Key, ReactNode } from 'react';
 
 interface ComboboxProps<T = any> {
 	choices: T[];
@@ -7,7 +7,9 @@ interface ComboboxProps<T = any> {
 	onChange: (item: T) => void;
 	itemMatchesSearch: (item: T, search: string | null) => boolean;
 	itemToString: (item: T) => string;
+	itemVis?: (item: T) => string | ReactNode;
 	itemToKey: (item: T) => Key;
+	sortFn?: (a: T, b: T) => number;
 	label?: string;
 	placeholder?: string;
 	activeClass?: string;
@@ -20,11 +22,13 @@ export const Combobox: React.FC<ComboboxProps> = ({
 	onChange,
 	itemMatchesSearch,
 	itemToString,
+	itemVis,
 	itemToKey,
 	label,
 	placeholder,
 	activeClass,
-	hoverClass
+	hoverClass,
+	sortFn
 }) => {
 	return (
 		<Downshift onChange={onChange} itemToString={itemToString} selectedItem={value}>
@@ -53,6 +57,8 @@ export const Combobox: React.FC<ComboboxProps> = ({
 							<ul {...getMenuProps()}>
 								{choices
 									.filter((item) => itemMatchesSearch(item, inputValue))
+									.slice()
+									.sort(sortFn)
 									.map((item, index) => (
 										<li
 											{...getItemProps({
@@ -70,7 +76,9 @@ export const Combobox: React.FC<ComboboxProps> = ({
 												}`
 											})}
 										>
-											{itemToString(item)}
+											{itemVis !== undefined
+												? itemVis(item)
+												: itemToString(item)}
 										</li>
 									))}
 							</ul>

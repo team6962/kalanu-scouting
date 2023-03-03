@@ -45,6 +45,18 @@
 						&.active {
 							font-weight: bold;
 						}
+
+						> span {
+							background: none;
+						}
+					}
+
+					.red {
+						color: $red;
+					}
+
+					.blue {
+						color: $blue;
 					}
 				}
 			}
