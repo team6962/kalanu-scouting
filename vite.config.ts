@@ -9,6 +9,11 @@ if (process.env.VERCEL === '1') {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	server: {
+		watch: {
+			useFsEvents: false
+		}
+	},
 	plugins: [
 		react(),
 		VitePWA({
