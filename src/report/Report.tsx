@@ -1,6 +1,6 @@
 import { GameReport } from './GameReport';
 import { PostgameReport } from './PostgameReport';
-import { PregameReport } from './PregameReport';
+import { Pregame } from './pregame/Pregame';
 import { useAppSelector } from '../state/hooks';
 import { selectPeriod } from '../state/slices/reportSlice';
 
@@ -10,7 +10,7 @@ export const Report: React.FC = () => {
 	const state = useAppSelector(selectPeriod);
 	return (
 		<div className={styles.report}>
-			{state === 'pregame' ? <PregameReport /> : null}
+			{state === 'pregame' ? <Pregame /> : null}
 			{state === 'game' ? <GameReport /> : null}
 			{state === 'postgame' ? <PostgameReport /> : null}
 		</div>
