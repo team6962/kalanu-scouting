@@ -1,4 +1,4 @@
-<h1 align="center">Kalanu Scouting</h1>
+<h1 align="center">kalanu scouting</h1>
 <p align="center">🔎 the discerning frc scout's app of choice</p>
 
 Current features:
