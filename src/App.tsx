@@ -13,7 +13,7 @@ export const App: React.FC = () => {
 		<div className={styles.app}>
 			{loading ? (
 				<div>
-					<p>Preparing for offline use...</p>
+					<p>preparing for offline...</p>
 				</div>
 			) : errors.length > 0 ? (
 				<div>

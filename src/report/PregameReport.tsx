@@ -9,7 +9,7 @@ import * as styles from './PregameReport.module.scss';
 
 const matchLevels: Record<string, string> = {
 	qm: 'Quals',
-	ef: 'Unknown Match Type',
+	ef: 'Match',
 	qf: 'Quarters',
 	sf: 'Semis',
 	f: 'Finals'
@@ -67,7 +67,7 @@ export const PregameReport: React.FC = () => {
 							  }`
 					}
 					itemToKey={(match) => match.key}
-					placeholder={'Match'}
+					placeholder={'match'}
 					hoverClass={styles.hover}
 					activeClass={styles.active}
 				/>
@@ -99,7 +99,7 @@ export const PregameReport: React.FC = () => {
 						team === null ? '' : `${team.team_number}: ${team.nickname}`
 					}
 					itemToKey={(team) => team.team_number}
-					placeholder={'Team'}
+					placeholder={'team'}
 					hoverClass={styles.hover}
 					activeClass={styles.active}
 				/>
@@ -107,7 +107,7 @@ export const PregameReport: React.FC = () => {
 			<input
 				type="button"
 				onClick={startHandler}
-				value="Start match"
+				value="start match"
 				disabled={team === null || match === null}
 			/>
 		</div>

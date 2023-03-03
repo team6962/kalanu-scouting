@@ -1,3 +1,5 @@
+@import './vars.scss';
+
 .sync {
 	width: min(640px, calc(100vw - 2rem));
 	display: flex;
@@ -11,5 +13,9 @@
 
 	input {
 		max-height: 2rem;
+		border-radius: 0.25rem;
+		border: 1px solid $black;
+		box-sizing: border-box;
+		background-color: $light;
 	}
 }
