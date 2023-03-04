@@ -1,4 +1,5 @@
 @import '../vars.scss';
+@import '../input.scss';
 
 .sync {
 	display: flex;
@@ -11,10 +12,8 @@
 	}
 
 	input {
-		max-height: 2rem;
-		border-radius: 0.25rem;
-		border: 1px solid $black;
-		box-sizing: border-box;
-		background-color: $light;
+		@include input;
+		padding: 0.25rem 0.5rem;
+		height: fit-content;
 	}
 }
