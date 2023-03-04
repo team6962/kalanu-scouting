@@ -1,4 +1,4 @@
-import { ViewSchema } from './ViewSchema';
+import { ViewSchema } from '../view/ViewSchema';
 
 export interface FlowSchema {
 	/**

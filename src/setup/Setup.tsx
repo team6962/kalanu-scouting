@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
-import { FlowSchema } from '../model/FlowSchema';
+import { FlowSchema } from '../flow/FlowSchema';
 import { ModelSchema } from '../model/ModelSchema';
 import { ComboPlaceholder } from './ComboBox';
 import { EventCombo } from './EventCombo';

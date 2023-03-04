@@ -1,4 +1,4 @@
-import { FlowSchema } from './FlowSchema';
+import { FlowSchema } from '../flow/FlowSchema';
 
 export interface ModelSchema {
 	/**

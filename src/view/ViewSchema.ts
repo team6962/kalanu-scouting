@@ -1,4 +1,4 @@
-import { ComponentSchema } from './ComponentSchema';
+import { ComponentSchema } from '../component/ComponentSchema';
 
 export interface TimerPhase {
 	/**
