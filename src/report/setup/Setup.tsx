@@ -6,30 +6,30 @@ import { MatchCombo } from './MatchCombo';
 import { TeamCombo } from './TeamCombo';
 import { ComboPlaceholder } from './ComboBox';
 
-import * as styles from './Pregame.module.scss';
+import * as styles from './Setup.module.scss';
 
-export interface PregameInfo {
+export interface SetupInfo {
 	year: number;
 	event: EventSimple;
 	match: MatchSimple;
 	team: TeamSimple;
 }
 
-interface PregameProps {
+interface SetupProps {
 	initialYear?: number;
 	initialEvent?: EventSimple;
 	initialMatch?: MatchSimple;
 	initialTeam?: TeamSimple;
 
-	onStart: (info: PregameInfo) => void;
+	onSubmit: (info: SetupInfo) => void;
 }
 
-export const Pregame: React.FC<PregameProps> = ({
+export const Setup: React.FC<SetupProps> = ({
 	initialYear,
 	initialEvent,
 	initialMatch,
 	initialTeam,
-	onStart
+	onSubmit
 }) => {
 	const [year, setYear] = useState(initialYear || new Date().getFullYear());
 	const [event, setEvent] = useState<EventSimple | null>(initialEvent || null);
@@ -61,7 +61,7 @@ export const Pregame: React.FC<PregameProps> = ({
 				type="button"
 				value="start match"
 				disabled={year === null || event === null || team === null || match === null}
-				onClick={() => onStart({ year, event, match, team } as PregameInfo)}
+				onClick={() => onSubmit({ year, event, match, team } as SetupInfo)}
 			/>
 		</div>
 	);

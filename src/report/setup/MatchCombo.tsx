@@ -1,3 +1,4 @@
+import { Dispatch } from 'react';
 import { useEventMatchesSimple } from '../../api/api';
 import { EventSimple, MatchSimple, TeamSimple } from '../../api/types';
 import { ComboBox, ComboPlaceholder } from './ComboBox';
@@ -15,7 +16,7 @@ const matchLevels: Record<string, string> = {
 interface MatchComboProps {
 	event: EventSimple;
 	value: MatchSimple | null;
-	onChange: (item: MatchSimple | null) => void;
+	onChange: Dispatch<MatchSimple | null>;
 	team?: TeamSimple | null;
 	disabled?: boolean;
 }

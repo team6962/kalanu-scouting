@@ -1,37 +1,14 @@
-import { useAppDispatch, useAppSelector } from '../state/hooks';
-import { ReportEvent, ReportEventType } from '../state/Report';
-import { addEvent, finishGame, selectEvents, undoEvent } from '../state/slices/reportSlice';
-import { useStopwatch } from './useStopwatch';
-import { Line } from 'rc-progress';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { ReportEvent, ReportEventType } from '../../state/Report';
+import { addEvent, finishGame, selectEvents, undoEvent } from '../../state/slices/reportSlice';
+import { Stopwatch, useStopwatch } from './Stopwatch';
 
-import * as styles from './GameReport.module.scss';
-
-interface StopwatchProps {
-	time: number;
-	totalTime: number;
-	strokeColor: string;
-}
+import * as styles from './Game.module.scss';
 
 const autonLength = 15 * 1000;
 const gameLength = 150 * 1000;
 
-export const Stopwatch: React.FC<StopwatchProps> = ({ time, totalTime, strokeColor }) => (
-	<>
-		<p>
-			{Math.floor(time / (1000 * 60))}m {((time / 1000) % 60).toFixed(1)}s
-		</p>
-		<Line
-			percent={(time / totalTime) * 100}
-			strokeWidth={8}
-			trailWidth={8}
-			strokeLinecap="square"
-			strokeColor={strokeColor}
-			trailColor={'#d8dada'}
-		/>
-	</>
-);
-
-export const GameReport: React.FC = () => {
+export const Game: React.FC = () => {
 	const time = useStopwatch(100);
 	const dispatch = useAppDispatch();
 

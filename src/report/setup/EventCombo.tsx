@@ -1,3 +1,4 @@
+import { Dispatch } from 'react';
 import { useEventsByYearSimple } from '../../api/api';
 import { EventSimple } from '../../api/types';
 import { ComboBox, ComboPlaceholder } from './ComboBox';
@@ -5,7 +6,7 @@ import { ComboBox, ComboPlaceholder } from './ComboBox';
 interface EventComboProps {
 	year: number;
 	value: EventSimple | null;
-	onChange: (item: EventSimple | null) => void;
+	onChange: Dispatch<EventSimple | null>;
 	disabled?: boolean;
 }
 
