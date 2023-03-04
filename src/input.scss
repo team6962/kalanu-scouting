@@ -15,15 +15,24 @@
 	justify-content: center;
 
 	transition-property: filter, transform;
-	transition-duration: 0.2s;
+	transition-duration: 0.1s;
+
+	&:disabled {
+		filter: blur(1.5px);
+	}
 
 	&[type='button'] {
 		background-color: $light;
 
 		&:not(:disabled) {
 			cursor: pointer;
+
+			&:hover {
+				transform: scale(1.02);
+			}
+
 			&:active {
-				transform: scale(1.05);
+				transform: scale(0.98);
 			}
 		}
 	}
