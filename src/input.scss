@@ -1,0 +1,30 @@
+@import './vars.scss';
+
+@mixin input {
+	margin: 0;
+	padding: 0rem 1rem;
+	border-radius: 0.25rem;
+	border: 1px solid $black;
+	box-sizing: border-box;
+	height: 50px;
+
+	text-overflow: ellipsis;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	transition-property: filter, transform;
+	transition-duration: 0.2s;
+
+	&[type='button'] {
+		background-color: $light;
+
+		&:not(:disabled) {
+			cursor: pointer;
+			&:active {
+				transform: scale(1.05);
+			}
+		}
+	}
+}

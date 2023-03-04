@@ -1,18 +1,18 @@
-import { useAppDispatch, useAppSelector } from './state/hooks';
-import { popReports, selectNumReports, selectReports } from './state/slices/offlineSlice';
+import { doc, writeBatch } from 'firebase/firestore';
+import { Dispatch, useState } from 'react';
+import { ReportState } from '../report/ReportState';
+import { firestore } from './firebase';
 import { useIsOnline } from './useIsOnline';
 
 import * as styles from './SyncMonitor.module.scss';
-import { useState } from 'react';
 
-import { writeBatch, doc } from 'firebase/firestore';
-import { firestore } from './firebase';
-import { store } from './state/store';
+interface SyncMonitorProps {
+	reports: ReportState[];
+	setReports: Dispatch<ReportState[]>;
+}
 
-export const SyncMonitor: React.FC = () => {
+export const SyncMonitor: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {
 	const online = useIsOnline();
-	const numReports = useAppSelector(selectNumReports);
-	const dispatch = useAppDispatch();
 
 	const [syncing, setSyncing] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
@@ -20,14 +20,13 @@ export const SyncMonitor: React.FC = () => {
 	const handleSync = async () => {
 		setSyncing(true);
 		try {
-			const reports = selectReports(store.getState());
 			const batch = writeBatch(firestore);
-			for (const id in reports) {
-				const ref = doc(firestore, 'reports', id);
-				batch.set(ref, reports[id]);
+			for (const report of reports) {
+				const ref = doc(firestore, 'reports', report.id);
+				batch.set(ref, report);
 			}
 			await batch.commit();
-			dispatch(popReports());
+			setReports([]);
 			setSyncing(false);
 		} catch (e) {
 			setError(e as Error);
@@ -38,13 +37,13 @@ export const SyncMonitor: React.FC = () => {
 		<div className={styles.sync}>
 			<p>
 				{online ? 'online.' : 'offline.'}
-				{numReports > 0
-					? ` ${numReports} report${numReports !== 1 ? 's' : ''} can be synced${
+				{reports.length > 0
+					? ` ${reports.length} report${reports.length !== 1 ? 's' : ''} can be synced${
 							online ? '' : ' after reconnecting'
 					  }.`
 					: null}
 			</p>
-			{online && numReports > 0 ? (
+			{online && reports.length > 0 ? (
 				<>
 					{error !== null ? <p>{error.message}</p> : null}
 					<input

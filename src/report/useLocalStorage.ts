@@ -1,8 +1,8 @@
-import { Dispatch, useEffect, useState } from 'react';
+import { Dispatch, useState } from 'react';
 
 export const useLocalStorage = <T extends unknown>(
 	key: string,
-	initialValue?: T
+	initialValue: T
 ): [T, Dispatch<T>] => {
 	// if value exists in local storage, use that instead of initialValue
 	const loaded = localStorage.getItem(key);

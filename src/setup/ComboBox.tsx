@@ -1,6 +1,6 @@
-import { useCombobox, UseComboboxState, UseComboboxStateChangeOptions } from 'downshift';
 import type { UseComboboxStateChange } from 'downshift';
-import { Key, ReactNode, ReactElement, useState, Dispatch } from 'react';
+import { useCombobox, UseComboboxState, UseComboboxStateChangeOptions } from 'downshift';
+import { Dispatch, Key, ReactElement, ReactNode, useState } from 'react';
 
 import * as styles from './ComboBox.module.scss';
 

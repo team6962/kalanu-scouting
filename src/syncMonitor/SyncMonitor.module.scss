@@ -1,7 +1,6 @@
-@import './vars.scss';
+@import '../vars.scss';
 
 .sync {
-	width: min(640px, calc(100vw - 2rem));
 	display: flex;
 	justify-content: center;
 	align-items: center;

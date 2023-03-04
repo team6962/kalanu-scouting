@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { EventSimple, MatchSimple, TeamSimple } from '../../api/types';
-import { YearPicker } from './YearPicker';
+import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
+import { FlowSchema } from '../model/FlowSchema';
+import { ModelSchema } from '../model/ModelSchema';
+import { ComboPlaceholder } from './ComboBox';
 import { EventCombo } from './EventCombo';
 import { MatchCombo } from './MatchCombo';
 import { TeamCombo } from './TeamCombo';
-import { ComboPlaceholder } from './ComboBox';
+import { YearPicker } from './YearPicker';
 
 import * as styles from './Setup.module.scss';
 
@@ -13,6 +15,7 @@ export interface SetupInfo {
 	event: EventSimple;
 	match: MatchSimple;
 	team: TeamSimple;
+	flow: FlowSchema;
 }
 
 interface SetupProps {
@@ -22,6 +25,7 @@ interface SetupProps {
 	initialTeam?: TeamSimple;
 
 	onSubmit: (info: SetupInfo) => void;
+	model: ModelSchema | ((year: number) => ModelSchema);
 }
 
 export const Setup: React.FC<SetupProps> = ({
@@ -29,12 +33,15 @@ export const Setup: React.FC<SetupProps> = ({
 	initialEvent,
 	initialMatch,
 	initialTeam,
-	onSubmit
+	onSubmit,
+	model: modelGetter
 }) => {
 	const [year, setYear] = useState(initialYear || new Date().getFullYear());
 	const [event, setEvent] = useState<EventSimple | null>(initialEvent || null);
 	const [match, setMatch] = useState<MatchSimple | null>(initialMatch || null);
 	const [team, setTeam] = useState<TeamSimple | null>(initialTeam || null);
+
+	const model = modelGetter instanceof Function ? modelGetter(year) : modelGetter;
 
 	return (
 		<div className={styles.pregame}>
@@ -57,12 +64,19 @@ export const Setup: React.FC<SetupProps> = ({
 					<ComboPlaceholder placeholder="team" />
 				</>
 			)}
-			<input
-				type="button"
-				value="start match"
-				disabled={year === null || event === null || team === null || match === null}
-				onClick={() => onSubmit({ year, event, match, team } as SetupInfo)}
-			/>
+			<div className={styles.flowPicker}>
+				{model.flows.map((flow) => (
+					<input
+						key={flow.id}
+						type="button"
+						value={`start ${flow.name}`}
+						disabled={
+							year === null || event === null || team === null || match === null
+						}
+						onClick={() => onSubmit({ year, event, match, team, flow } as SetupInfo)}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };

@@ -1,9 +1,7 @@
 import { Dispatch } from 'react';
-import { useEventMatchesSimple } from '../../api/api';
-import { EventSimple, MatchSimple, TeamSimple } from '../../api/types';
+import { useEventMatchesSimple } from '../api/api';
+import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
 import { ComboBox, ComboPlaceholder } from './ComboBox';
-
-import * as styles from './ComboBox.module.scss';
 
 const matchLevels: Record<string, string> = {
 	qm: 'Quals',
@@ -46,7 +44,7 @@ export const MatchCombo: React.FC<MatchComboProps> = ({
 	// if events aren't ready to display
 	return matches === undefined || matchesLoading || matchesError !== undefined ? (
 		// show dummy element
-		<ComboPlaceholder placeholder="matches" />
+		<ComboPlaceholder placeholder="match" />
 	) : (
 		// otherwise show picker
 		<ComboBox

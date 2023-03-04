@@ -1,6 +1,6 @@
 import { Dispatch } from 'react';
-import { useEventTeamsSimple } from '../../api/api';
-import { EventSimple, MatchSimple, TeamSimple } from '../../api/types';
+import { useEventTeamsSimple } from '../api/api';
+import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
 import { ComboBox, ComboPlaceholder } from './ComboBox';
 
 import * as styles from './ComboBox.module.scss';
@@ -40,7 +40,7 @@ export const TeamCombo: React.FC<TeamComboProps> = ({
 	// if events aren't ready to display
 	return teams === undefined || teamsLoading || teamsError !== undefined ? (
 		// show dummy element
-		<ComboPlaceholder placeholder="teams" />
+		<ComboPlaceholder placeholder="team" />
 	) : (
 		// otherwise show picker
 		<ComboBox
