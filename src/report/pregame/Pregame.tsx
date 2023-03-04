@@ -1,41 +1,67 @@
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../state/hooks';
-import { startGame } from '../../state/slices/reportSlice';
-import { selectMatches, selectTeams } from '../../state/slices/offlineSlice';
-import { MatchSimple, TeamSimple } from '../../api/types';
+import { EventSimple, MatchSimple, TeamSimple } from '../../api/types';
+import { YearPicker } from './YearPicker';
+import { EventCombo } from './EventCombo';
 import { MatchCombo } from './MatchCombo';
+import { TeamCombo } from './TeamCombo';
+import { ComboPlaceholder } from './ComboBox';
 
 import * as styles from './Pregame.module.scss';
-import { TeamCombo } from './TeamCombo';
 
-export const Pregame: React.FC = () => {
-	const [team, setTeam] = useState<TeamSimple | null>(null);
-	const [match, setMatch] = useState<MatchSimple | null>(null);
+export interface PregameInfo {
+	year: number;
+	event: EventSimple;
+	match: MatchSimple;
+	team: TeamSimple;
+}
 
-	const matches = useAppSelector(selectMatches);
-	const teams = useAppSelector(selectTeams);
+interface PregameProps {
+	initialYear?: number;
+	initialEvent?: EventSimple;
+	initialMatch?: MatchSimple;
+	initialTeam?: TeamSimple;
 
-	const dispatch = useAppDispatch();
-	const startHandler = () => {
-		dispatch(
-			startGame({
-				matchId: match?.key!,
-				teamId: team?.key!
-			})
-		);
-	};
+	onStart: (info: PregameInfo) => void;
+}
+
+export const Pregame: React.FC<PregameProps> = ({
+	initialYear,
+	initialEvent,
+	initialMatch,
+	initialTeam,
+	onStart
+}) => {
+	const [year, setYear] = useState(initialYear || new Date().getFullYear());
+	const [event, setEvent] = useState<EventSimple | null>(initialEvent || null);
+	const [match, setMatch] = useState<MatchSimple | null>(initialMatch || null);
+	const [team, setTeam] = useState<TeamSimple | null>(initialTeam || null);
 
 	return (
 		<div className={styles.pregame}>
-			<div>
-				<MatchCombo items={matches} value={match} onChange={setMatch} team={team} />
-				<TeamCombo items={teams} value={team} onChange={setTeam} match={match} />
+			<div className={styles.yearAndEvent}>
+				<YearPicker year={year} setYear={setYear} />
+				{year !== null ? (
+					<EventCombo year={year} value={event} onChange={setEvent} />
+				) : (
+					<ComboPlaceholder placeholder="event" />
+				)}
 			</div>
+			{event !== null ? (
+				<>
+					<MatchCombo event={event} value={match} onChange={setMatch} team={team} />
+					<TeamCombo event={event} value={team} onChange={setTeam} match={match} />
+				</>
+			) : (
+				<>
+					<ComboPlaceholder placeholder="match" />
+					<ComboPlaceholder placeholder="team" />
+				</>
+			)}
 			<input
 				type="button"
-				onClick={startHandler}
 				value="start match"
-				disabled={team === null || match === null}
+				disabled={year === null || event === null || team === null || match === null}
+				onClick={() => onStart({ year, event, match, team } as PregameInfo)}
 			/>
 		</div>
 	);

@@ -1,5 +1,8 @@
-import { MatchSimple, TeamSimple } from '../../api/types';
-import { ComboBox } from './ComboBox';
+import { useEventMatchesSimple } from '../../api/api';
+import { EventSimple, MatchSimple, TeamSimple } from '../../api/types';
+import { ComboBox, ComboPlaceholder } from './ComboBox';
+
+import * as styles from './ComboBox.module.scss';
 
 const matchLevels: Record<string, string> = {
 	qm: 'Quals',
@@ -10,13 +13,27 @@ const matchLevels: Record<string, string> = {
 };
 
 interface MatchComboProps {
-	items: MatchSimple[];
+	event: EventSimple;
 	value: MatchSimple | null;
 	onChange: (item: MatchSimple | null) => void;
 	team?: TeamSimple | null;
+	disabled?: boolean;
 }
 
-export const MatchCombo: React.FC<MatchComboProps> = ({ items, value, onChange, team = null }) => {
+export const MatchCombo: React.FC<MatchComboProps> = ({
+	event,
+	value,
+	onChange,
+	team = null,
+	disabled
+}) => {
+	// fetch matches from api
+	const [matches, matchesLoading, matchesError] = useEventMatchesSimple(event.key);
+
+	// if event changes to one other than this match, unset it
+	if (value !== null && value.event_key !== event.key) onChange(null);
+
+	// prep handler
 	const matchToString = (match: MatchSimple | null, suffix = true) => {
 		if (match === null) return '';
 
@@ -25,12 +42,17 @@ export const MatchCombo: React.FC<MatchComboProps> = ({ items, value, onChange, 
 		return `${level} ${match.match_number}${suffix ? setSuffix : ''}`;
 	};
 
-	return (
+	// if events aren't ready to display
+	return matches === undefined || matchesLoading || matchesError !== undefined ? (
+		// show dummy element
+		<ComboPlaceholder placeholder="matches" />
+	) : (
+		// otherwise show picker
 		<ComboBox
-			items={items}
+			items={matches}
 			//
 			value={value}
-			onChange={(item) => onChange(item === undefined ? null : item)}
+			onChange={onChange}
 			//
 			itemToString={matchToString}
 			itemToKey={(match) => match.key}
@@ -54,6 +76,7 @@ export const MatchCombo: React.FC<MatchComboProps> = ({ items, value, onChange, 
 			//
 			placeholder="match"
 			label="match: "
+			disabled={disabled}
 		/>
 	);
 };

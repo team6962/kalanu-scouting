@@ -1,4 +1,4 @@
-import { useCombobox } from 'downshift';
+import { useCombobox, UseComboboxState, UseComboboxStateChangeOptions } from 'downshift';
 import type { UseComboboxStateChange } from 'downshift';
 import { Key, ReactNode, ReactElement, useState } from 'react';
 
@@ -8,7 +8,7 @@ type ComboboxProps<T> = {
 	items: T[];
 
 	value: T | null;
-	onChange: (item: T | null | undefined) => void;
+	onChange: (item: T | null) => void;
 
 	itemToString: (item: T | null) => string;
 	itemToNode?: (item: T) => string | ReactNode;
@@ -19,6 +19,7 @@ type ComboboxProps<T> = {
 
 	label?: string;
 	placeholder?: string;
+	disabled?: boolean;
 };
 
 export const ComboBox = <T extends unknown>({
@@ -35,10 +36,11 @@ export const ComboBox = <T extends unknown>({
 	sortItems,
 
 	label,
-	placeholder
+	placeholder,
+	disabled
 }: ComboboxProps<T>): ReactElement => {
 	// will sort initial choices if possible
-	items = items.slice().sort(sortItems);
+	items = (items || []).slice().sort(sortItems);
 
 	const [inputItems, setInputItems] = useState<
 		{
@@ -48,22 +50,47 @@ export const ComboBox = <T extends unknown>({
 	>(items.map((item, index) => ({ item, index })));
 
 	const onSelectedItemChange = ({ selectedItem }: UseComboboxStateChange<T>) =>
-		onChange(selectedItem);
+		onChange(selectedItem === undefined ? null : selectedItem);
 
-	const onStateChange = ({ type, inputValue }: UseComboboxStateChange<T>) => {
-		switch (type) {
-			case useCombobox.stateChangeTypes.InputFocus:
-			case useCombobox.stateChangeTypes.InputChange:
-				let tempItems: {
-					index: number;
-					item: T;
-				}[] = items.map((item, index) => ({ item, index }));
-				if (itemMatchesSearch !== undefined)
-					tempItems = tempItems.filter((item) =>
-						itemMatchesSearch(item.item, inputValue || '')
-					);
-				setInputItems(tempItems);
-				break;
+	const stateReducer = (
+		{ highlightedIndex }: UseComboboxState<T>,
+		{ type, changes }: UseComboboxStateChangeOptions<T>
+	): Partial<UseComboboxState<T>> => {
+		const { stateChangeTypes } = useCombobox;
+		if (type === stateChangeTypes.InputKeyDownArrowUp) {
+			const current = inputItems.findIndex(({ index }) => index === highlightedIndex);
+			const prev = inputItems[current === -1 ? 0 : current - 1];
+			return {
+				...changes,
+				highlightedIndex: prev.index
+			};
+		} else if (type === stateChangeTypes.InputKeyDownArrowDown) {
+			const current = inputItems.findIndex(({ index }) => index === highlightedIndex);
+			const next = inputItems[current === -1 ? 0 : current + 1];
+			return {
+				...changes,
+				highlightedIndex: next.index
+			};
+		} else if (type === stateChangeTypes.InputFocus || type === stateChangeTypes.InputChange) {
+			let tempItems: {
+				index: number;
+				item: T;
+			}[] = items.map((item, index) => ({ item, index }));
+			if (itemMatchesSearch !== undefined)
+				tempItems = tempItems.filter((item) =>
+					itemMatchesSearch(item.item, changes.inputValue || '')
+				);
+			setInputItems(tempItems);
+			return changes;
+		} else if (type === stateChangeTypes.InputBlur) {
+			if (value !== null)
+				return {
+					...changes,
+					inputValue: itemToString(value)
+				};
+			return changes;
+		} else {
+			return changes;
 		}
 	};
 
@@ -73,15 +100,15 @@ export const ComboBox = <T extends unknown>({
 			itemToString,
 			selectedItem: value,
 			onSelectedItemChange,
-			onStateChange
+			stateReducer
 		});
 
 	return (
 		<div className={styles.combobox}>
 			{label !== undefined ? <label {...getLabelProps()}>{label}</label> : null}
-			<input {...getInputProps()} placeholder={placeholder} />
+			<input {...getInputProps()} placeholder={placeholder} disabled={disabled} />
 			<ul {...getMenuProps({}, { suppressRefError: true })}>
-				{isOpen
+				{isOpen && !disabled
 					? inputItems.map(({ item, index }) => (
 							<li
 								{...getItemProps({ item, index })}
@@ -98,3 +125,9 @@ export const ComboBox = <T extends unknown>({
 		</div>
 	);
 };
+
+export const ComboPlaceholder: React.FC<{ placeholder?: string }> = ({ placeholder }) => (
+	<div className={styles.combobox}>
+		<input type="text" placeholder={placeholder} disabled />
+	</div>
+);

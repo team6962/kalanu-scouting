@@ -1,27 +1,52 @@
-import { MatchSimple, TeamSimple } from '../../api/types';
-import { ComboBox } from './ComboBox';
+import { useEventTeamsSimple } from '../../api/api';
+import { EventSimple, MatchSimple, TeamSimple } from '../../api/types';
+import { ComboBox, ComboPlaceholder } from './ComboBox';
 
 import * as styles from './ComboBox.module.scss';
 
 interface TeamComboProps {
-	items: TeamSimple[];
+	event: EventSimple;
 	value: TeamSimple | null;
 	onChange: (item: TeamSimple | null) => void;
 	match?: MatchSimple | null;
+	disabled?: boolean;
 }
 
-export const TeamCombo: React.FC<TeamComboProps> = ({ items, value, onChange, match = null }) => {
+export const TeamCombo: React.FC<TeamComboProps> = ({
+	event,
+	value,
+	onChange,
+	match = null,
+	disabled
+}) => {
+	// fetch matches from api
+	const [teams, teamsLoading, teamsError] = useEventTeamsSimple(event.key);
+
+	// if event changes to one this team isn't in, unset it
+	if (
+		value !== null &&
+		teams !== undefined &&
+		teams.find((team) => team.key === value.key) === undefined
+	)
+		onChange(null);
+
+	// prep handler
 	const teamToString = (team: TeamSimple | null) => {
 		if (team === null) return '';
 		return `${team.team_number}: ${team.nickname}`;
 	};
 
-	return (
+	// if events aren't ready to display
+	return teams === undefined || teamsLoading || teamsError !== undefined ? (
+		// show dummy element
+		<ComboPlaceholder placeholder="teams" />
+	) : (
+		// otherwise show picker
 		<ComboBox
-			items={items}
+			items={teams}
 			//
 			value={value}
-			onChange={(item) => onChange(item === undefined ? null : item)}
+			onChange={onChange}
 			//
 			itemToString={teamToString}
 			itemToNode={(team) => {
@@ -49,6 +74,7 @@ export const TeamCombo: React.FC<TeamComboProps> = ({ items, value, onChange, ma
 			//
 			placeholder="team"
 			label="team: "
+			disabled={disabled}
 		/>
 	);
 };
