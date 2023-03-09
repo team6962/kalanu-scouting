@@ -42,6 +42,11 @@ export interface ViewSchemaOptions {
 	 * @default true
 	 */
 	showUndo?: boolean;
+	/**
+	 * allow undoing events from a previous phase.
+	 * @default false
+	 */
+	undoAcrossPhases?: boolean;
 }
 
 export interface ViewSchema {

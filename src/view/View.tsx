@@ -53,35 +53,50 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 		});
 	};
 
+	const undoDisabled = () => {
+		if (exited) return true;
+		if (state.events.length === 0) return true;
+		if (view.options && view.options.undoAcrossPhases !== true) {
+			if (state.events[0].phase === null) return false;
+			if (phase === null) return false;
+			return state.events[0].phase !== phase.id;
+		} else {
+			return false;
+		}
+	};
+
+	const showTimer =
+		view.options === undefined ||
+		view.options.showTimer === undefined ||
+		view.options.showTimer === true;
+	const showUndo =
+		view.options === undefined ||
+		view.options.showUndo === undefined ||
+		view.options.showUndo === true;
+
 	return (
 		<div className={styles.view}>
-			{view.options === undefined ||
-			view.options.showTimer ||
-			view.options.showTimer === undefined ||
-			view.options.showUndo ||
-			view.options.showUndo === undefined ? (
+			{showTimer || showUndo ? (
 				<div className={styles.timerAndUndo}>
-					{view.options === undefined ||
-					view.options.showTimer ||
-					view.options.showTimer === undefined ? (
+					{showTimer ? (
 						<Stopwatch
 							time={time}
 							totalTime={view.options ? view.options.timerLength || 150 : 150}
 							strokeColor={phase ? phase.color || '#4979db' : '#4979db'}
 						/>
 					) : null}
-					{view.options === undefined ||
-					view.options.showUndo ||
-					view.options.showUndo === undefined ? (
+
+					{showUndo ? (
 						<input
 							type="button"
 							value={'undo'}
 							onClick={handleUndo}
-							disabled={state.events.length === 0 || exited}
+							disabled={undoDisabled()}
 						/>
 					) : null}
 				</div>
 			) : null}
+
 			{view.layout.map((row, i) => (
 				<div key={i}>
 					{row.map((key: string) => (
@@ -96,6 +111,7 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 					))}
 				</div>
 			))}
+
 			<input
 				type="button"
 				value={`${exited ? 'ending' : 'end'} ${view.name || view.id}`}
