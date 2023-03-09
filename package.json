@@ -10,7 +10,6 @@
 		"clean": "rm -r dist dev-dist"
 	},
 	"dependencies": {
-		"@reduxjs/toolkit": "^1.9.3",
 		"downshift": "^7.2.1",
 		"firebase": "^9.17.1",
 		"nanoid": "^4.0.1",
@@ -18,7 +17,7 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-firebase-hooks": "^5.1.1",
-		"react-redux": "^8.0.5"
+		"renegade": "github:thrilliams/renegade"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.27",
