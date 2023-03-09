@@ -5,7 +5,7 @@ export const useIsOnline = () => {
 	const [isOnline, setIsOnline] = useState(window.navigator.onLine);
 
 	const wb = useWorkbox();
-	console.log(wb);
+	Object.assign(window, { wb });
 
 	useEffect(() => {
 		const handleOnline = () => setIsOnline(true);
