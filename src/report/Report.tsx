@@ -32,6 +32,9 @@ export const Report: React.FC = () => {
 		year: 2022
 	});
 
+	// TODO: remove after competition
+	if (localStorage.getItem('reports') === '{}') localStorage.setItem('reports', '[]');
+
 	const [reports, setReports] = useLocalStorage<ReportState[]>('reports', []);
 
 	const onSetupSubmit = ({ year, event, match, team, flow }: SetupInfo) => {
