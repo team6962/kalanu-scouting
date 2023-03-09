@@ -7,7 +7,7 @@
 		"dev": "vite --host",
 		"build": "tsc && vite build",
 		"preview": "vite preview --host",
-		"clean": "rm -r dist dev-dist"
+		"clean": "rm -r dist"
 	},
 	"dependencies": {
 		"downshift": "^7.2.1",
