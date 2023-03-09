@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useWorkbox } from './workbox';
 
 export const useIsOnline = () => {
 	const [isOnline, setIsOnline] = useState(window.navigator.onLine);
+
+	const wb = useWorkbox();
+	console.log(wb);
 
 	useEffect(() => {
 		const handleOnline = () => setIsOnline(true);

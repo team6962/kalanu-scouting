@@ -4,14 +4,14 @@ import { ReportState } from '../report/ReportState';
 import { firestore } from './firebase';
 import { useIsOnline } from './useIsOnline';
 
-import * as styles from './SyncMonitor.module.scss';
+import * as styles from './Status.module.scss';
 
 interface SyncMonitorProps {
 	reports: ReportState[];
 	setReports: Dispatch<ReportState[]>;
 }
 
-export const SyncMonitor: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {
+export const Status: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {
 	const online = useIsOnline();
 
 	const [syncing, setSyncing] = useState(false);

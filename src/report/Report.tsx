@@ -5,7 +5,7 @@ import { Flow, FlowState } from '../flow/Flow';
 import { FlowSchema } from '../flow/FlowSchema';
 import { Model2023 } from '../Model2023';
 import { Setup, SetupInfo } from '../setup/Setup';
-import { SyncMonitor } from '../syncMonitor/SyncMonitor';
+import { Status } from '../status/Status';
 import { useLocalStorage } from './useLocalStorage';
 import { ReportState } from './ReportState';
 
@@ -62,7 +62,7 @@ export const Report: React.FC = () => {
 	return (
 		<div className={styles.report}>
 			<div>
-				<SyncMonitor reports={reports} setReports={setReports} />
+				<Status reports={reports} setReports={setReports} />
 				{state === 'setup' ? (
 					<Setup
 						initialYear={initialYear}
