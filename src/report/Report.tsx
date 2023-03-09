@@ -45,7 +45,7 @@ export const Report: React.FC = () => {
 
 	const onFlowSubmit = (state: FlowState) => {
 		const report: Partial<ReportState> = structuredClone(state);
-		setState('setup');
+		setTimeout(() => setState('setup'), 500);
 
 		report.id = nanoid();
 		report.modelId = Model2023.id;

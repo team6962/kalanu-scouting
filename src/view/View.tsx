@@ -1,4 +1,4 @@
-import { Dispatch } from 'react';
+import { Dispatch, useState } from 'react';
 import { JsonSerializable } from 'renegade';
 import { Component } from '../component/Component';
 import { FlowState } from '../flow/Flow';
@@ -40,6 +40,12 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 	const time = useStopwatch(100, state.start);
 	const phase = resolveTimerPhase(time, view);
 
+	const [exited, setExited] = useState(false);
+	const handleExit = () => {
+		setExited(true);
+		if (onExit) onExit();
+	};
+
 	const handleUndo = () => {
 		setState({
 			...state,
@@ -71,17 +77,18 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 							type="button"
 							value={'undo'}
 							onClick={handleUndo}
-							disabled={state.events.length === 0}
+							disabled={state.events.length === 0 || exited}
 						/>
 					) : null}
 				</div>
 			) : null}
 			{view.layout.map((row, i) => (
 				<div key={i}>
-					{row.map((key) => (
+					{row.map((key: string) => (
 						<Component
 							key={key}
 							component={view.components.find((comp) => comp.id === key)!}
+							disabled={exited}
 							phase={phase}
 							state={state}
 							setState={setState}
@@ -89,7 +96,12 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 					))}
 				</div>
 			))}
-			<input type="button" value={`end ${view.name || view.id}`} onClick={onExit} />
+			<input
+				type="button"
+				value={`${exited ? 'ending' : 'end'} ${view.name || view.id}`}
+				onClick={handleExit}
+				disabled={exited}
+			/>
 		</div>
 	);
 };
