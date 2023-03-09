@@ -2,11 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { VitePWA } from 'vite-plugin-pwa';
 
-let version = '1.0.0';
-if (process.env.VERCEL === '1') {
-	version = process.env.VERCEL_GIT_COMMIT_SHA;
-}
-
 // https://vitejs.dev/config/
 export default defineConfig({
 	server: {
@@ -46,8 +41,7 @@ export default defineConfig({
 				],
 				theme_color: '#444444',
 				background_color: '#444444',
-				display: 'standalone',
-				description: `the discerning frc scout's app of choice. current version: ${version}`
+				display: 'standalone'
 			},
 
 			workbox: {

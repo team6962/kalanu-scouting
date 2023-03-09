@@ -3,17 +3,25 @@
 
 .sync {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 1rem;
 
-	p {
-		text-align: center;
-	}
+	> div {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem;
 
-	input {
-		@include input;
-		padding: 0.25rem 0.5rem;
-		height: fit-content;
+		p {
+			text-align: center;
+		}
+
+		input {
+			@include input;
+			padding: 0.25rem 0.5rem;
+			height: fit-content;
+		}
 	}
 }

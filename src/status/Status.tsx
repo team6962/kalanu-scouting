@@ -35,25 +35,27 @@ export const Status: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {
 
 	return (
 		<div className={styles.sync}>
-			<p>
-				{online ? 'online.' : 'offline.'}
-				{reports.length > 0
-					? ` ${reports.length} report${reports.length !== 1 ? 's' : ''} can be synced${
-							online ? '' : ' after reconnecting'
-					  }.`
-					: null}
-			</p>
-			{online && reports.length > 0 ? (
-				<>
-					{error !== null ? <p>{error.message}</p> : null}
-					<input
-						type="button"
-						onClick={handleSync}
-						value={syncing ? 'syncing...' : 'sync now'}
-						disabled={syncing}
-					/>
-				</>
-			) : null}
+			<div>
+				<p>
+					{online ? 'online.' : 'offline.'}
+					{reports.length > 0
+						? ` ${reports.length} report${
+								reports.length !== 1 ? 's' : ''
+						  } can be synced${online ? '' : ' after reconnecting'}.`
+						: null}
+				</p>
+				{online && reports.length > 0 ? (
+					<>
+						{error !== null ? <p>{error.message}</p> : null}
+						<input
+							type="button"
+							onClick={handleSync}
+							value={syncing ? 'syncing...' : 'sync now'}
+							disabled={syncing}
+						/>
+					</>
+				) : null}
+			</div>
 		</div>
 	);
 };
