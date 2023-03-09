@@ -2,7 +2,7 @@ import { Dispatch, useState } from 'react';
 import { ComponentSchemaType } from '../component/ComponentSchema';
 import { View, ViewEvent } from '../view/View';
 import { ViewSchema } from '../view/ViewSchema';
-import { FlowSchema } from './FlowSchema';
+import { FlowSchema, TimerPhase } from './FlowSchema';
 
 interface FlowProps {
 	flow: FlowSchema;
@@ -10,11 +10,11 @@ interface FlowProps {
 	onSubmit?: Dispatch<FlowState>;
 }
 
-export interface FlowState {
+export type FlowState = {
 	start: number;
 	events: ViewEvent[];
 	data: Record<string, string | boolean>;
-}
+};
 
 const reduceViewToInitialData = (view: ViewSchema): FlowState['data'] => {
 	const data: FlowState['data'] = {};
@@ -24,6 +24,18 @@ const reduceViewToInitialData = (view: ViewSchema): FlowState['data'] => {
 			data[comp.id] = comp.default || '';
 	}
 	return data;
+};
+
+const resolveTimerPhase = (time: number, flow: FlowSchema): TimerPhase | null => {
+	if (flow.options === undefined) return null;
+	if (flow.options.timerPhases === undefined) return null;
+
+	let currentTime = 0;
+	for (const phase of flow.options.timerPhases) {
+		if (currentTime + phase.length > time) return phase;
+		else currentTime += phase.length;
+	}
+	return null;
 };
 
 export const Flow: React.FC<FlowProps> = ({ flow, initialState, onSubmit }) => {

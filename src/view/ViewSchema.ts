@@ -8,13 +8,14 @@ export interface TimerPhase {
 	/**
 	 * the id of the phase. used by your components and internally.
 	 */
-	id?: string;
+	id: string;
 	/**
 	 * the name of the phase as displayed to the user.
 	 */
 	name?: string;
 	/**
 	 * the color taken by the timer during this phase. hex.
+	 * @default '#4979db'
 	 */
 	color?: string;
 }
@@ -37,7 +38,7 @@ export interface ViewSchemaOptions {
 	timerPhases?: TimerPhase[];
 
 	/**
-	 * show event undo button. only used if view contains components of type Event.
+	 * show event undo button.
 	 * @default true
 	 */
 	showUndo?: boolean;

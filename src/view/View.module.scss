@@ -12,6 +12,11 @@
 		gap: 1rem;
 	}
 
+	.timerAndUndo {
+		grid-template-columns: 1fr;
+		grid-auto-columns: max-content;
+	}
+
 	input {
 		@include input;
 	}

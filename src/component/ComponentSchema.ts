@@ -1,3 +1,5 @@
+import { Operator } from 'renegade';
+
 export enum ComponentSchemaType {
 	/**
 	 * adds an event to the report. displayed as a button.
@@ -25,11 +27,16 @@ export type ComponentSchema = {
 	/**
 	 * displayed to the user.
 	 */
-	name: string;
+	name: Operator;
 	/**
 	 * recorded internally and used for layouting.
 	 */
 	id: string;
+	/**
+	 * whether the displayed input should be disabled.
+	 * @default false
+	 */
+	disabled?: Operator;
 } & (
 	| {
 			type: ComponentSchemaType.Event;
@@ -44,7 +51,7 @@ export type ComponentSchema = {
 			 * relevant if multiple buttons produce variations of a single event.
 			 * @default undefined
 			 */
-			eventPayload?: any;
+			eventPayload?: Operator;
 			/**
 			 * whether the event should include the time elapsed
 			 * since the start of the match in its payload. no effect

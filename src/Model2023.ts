@@ -1,5 +1,110 @@
+import { Operator } from 'renegade';
 import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
+
+const scoreDisabled: Operator = {
+	$let: {
+		// find index of most recent time we scored and picked up a piece
+		vars: {
+			lastPickup: {
+				$indexOfArray: [
+					{
+						$map: {
+							input: '$events',
+							in: {
+								$eq: ['$$this.id', 'pickup']
+							}
+						}
+					},
+					true
+				]
+			},
+			lastScore: {
+				$indexOfArray: [
+					{
+						$map: {
+							input: '$events',
+							in: {
+								$eq: ['$$this.id', 'score']
+							}
+						}
+					},
+					true
+				]
+			}
+		},
+		in: {
+			$cond: {
+				// if we never picked up a piece
+				if: {
+					$eq: ['$$lastPickup', -1]
+				},
+				// disable scoring
+				then: true,
+				// if we have picked up a piece
+				else: {
+					$cond: {
+						// and we haven't scored since then
+						if: {
+							$eq: ['$$lastScore', -1]
+						},
+						// enable scoring
+						then: false,
+						// otherwise, only disable scoring if we scored
+						// more recently than we picked up a piece
+						else: {
+							$lt: ['$$lastScore', '$$lastPickup']
+						}
+					}
+				}
+			}
+		}
+	}
+};
+
+const currentlyDocked: Operator = {
+	$ne: [
+		{
+			$indexOfArray: [
+				{
+					$map: {
+						input: '$events',
+						in: {
+							$and: [
+								{ $eq: ['$$this.id', 'dock'] },
+								{ $eq: ['$$this.phase', '$$phase'] }
+							]
+						}
+					}
+				},
+				true
+			]
+		},
+		-1
+	]
+};
+
+const currentlyEngaged: Operator = {
+	$ne: [
+		{
+			$indexOfArray: [
+				{
+					$map: {
+						input: '$events',
+						in: {
+							$and: [
+								{ $eq: ['$$this.id', 'engage'] },
+								{ $eq: ['$$this.phase', '$$phase'] }
+							]
+						}
+					}
+				},
+				true
+			]
+		},
+		-1
+	]
+};
 
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
@@ -17,48 +122,80 @@ export const Model2023: ModelSchema = {
 						name: 'box',
 						id: 'boxPickup',
 						eventId: 'pickup',
-						eventPayload: { piece: 'box' }
+						eventPayload: { piece: 'box' },
+						disabled: currentlyDocked
 					},
 					{
 						type: ComponentSchemaType.Event,
 						name: 'cone',
 						id: 'conePickup',
 						eventId: 'pickup',
-						eventPayload: { piece: 'cone' }
+						eventPayload: { piece: 'cone' },
+						disabled: currentlyDocked
 					},
 					{
 						type: ComponentSchemaType.Event,
 						name: '1',
 						id: 'bottomScore',
 						eventId: 'score',
-						eventPayload: { level: 1 }
+						eventPayload: { level: 1 },
+						disabled: { $or: [scoreDisabled, currentlyDocked] }
 					},
 					{
 						type: ComponentSchemaType.Event,
 						name: '2',
 						id: 'middleScore',
 						eventId: 'score',
-						eventPayload: { level: 2 }
+						eventPayload: { level: 2 },
+						disabled: { $or: [scoreDisabled, currentlyDocked] }
 					},
 					{
 						type: ComponentSchemaType.Event,
 						name: '3',
 						id: 'topScore',
 						eventId: 'score',
-						eventPayload: { level: 3 }
+						eventPayload: { level: 3 },
+						disabled: { $or: [scoreDisabled, currentlyDocked] }
 					},
 					{
 						type: ComponentSchemaType.Event,
-						name: 'dock',
+						name: {
+							$cond: {
+								if: currentlyDocked,
+								then: 'docked',
+								else: 'dock'
+							}
+						},
 						id: 'docking',
-						eventId: 'docking'
+						eventId: 'dock',
+						disabled: currentlyDocked
+					},
+					{
+						type: ComponentSchemaType.Event,
+						name: {
+							$cond: {
+								if: currentlyEngaged,
+								then: 'engaged',
+								else: 'engage'
+							}
+						},
+						id: 'engaging',
+						eventId: 'engage',
+						disabled: {
+							$or: [
+								{
+									$not: [currentlyDocked]
+								},
+								currentlyEngaged
+							]
+						}
 					}
 				],
 
 				layout: [
 					['boxPickup', 'conePickup'],
 					['bottomScore', 'middleScore', 'topScore'],
-					['docking']
+					['docking', 'engaging']
 				],
 
 				options: {
@@ -105,7 +242,8 @@ export const Model2023: ModelSchema = {
 				layout: [['fouled', 'parked'], ['notes']],
 
 				options: {
-					showTimer: false
+					showTimer: false,
+					showUndo: false
 				}
 			}
 		}
