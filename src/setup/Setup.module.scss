@@ -1,0 +1,35 @@
+@import '../vars.scss';
+@import '../input.scss';
+
+.pregame {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	input {
+		@include input;
+	}
+
+	.yearAndEvent {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+
+		> input {
+			width: 100%;
+		}
+	}
+
+	.flowPicker {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
+
+		> input {
+			flex-grow: 1;
+			// makes items share horizontal space evenly
+			flex-basis: 0%;
+		}
+	}
+}

@@ -1,17 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import { store } from './state/store';
-import { Provider } from 'react-redux';
-
-import { App } from './App';
+import { Report } from './report/Report';
 
 import './main.scss';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
-		<Provider store={store}>
-			<App />
-		</Provider>
+		<Report />
 	</React.StrictMode>
 );

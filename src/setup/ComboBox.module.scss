@@ -1,0 +1,56 @@
+@import '../vars.scss';
+
+.combobox {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+
+	> label {
+		display: none;
+	}
+
+	> input {
+		width: 100%;
+	}
+
+	> ul {
+		list-style: none;
+		padding-left: 0;
+		margin: 0;
+		border-radius: 0.25rem;
+		overflow: hidden;
+		border: 1px solid $black;
+
+		&:empty {
+			display: none;
+		}
+
+		> li {
+			padding: 0.5rem;
+			cursor: pointer;
+			&:not(:last-child) {
+				border-bottom: 1px solid $black;
+			}
+
+			&.active {
+				font-weight: bold;
+			}
+
+			&.highlighted {
+				background-color: $light;
+			}
+
+			> span {
+				background: none;
+			}
+
+			.red {
+				color: $red;
+			}
+
+			.blue {
+				color: $blue;
+			}
+		}
+	}
+}

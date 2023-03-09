@@ -1,36 +1,17 @@
 @import '../vars.scss';
 
 .report {
-	width: min(640px, calc(100vw - 2rem));
+	padding: 2rem;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	gap: 1rem;
 
-	input {
-		margin: 0;
-		padding: 0rem 1rem;
-		border-radius: 0.25rem;
-		border: 1px solid $black;
-		box-sizing: border-box;
-		height: 50px;
-
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-
-		transition-property: filter, transform;
-		transition-duration: 0.2s;
-
-		&[type='button'] {
-			background-color: $light;
-
-			&:active:not(:disabled) {
-				transform: scale(1.05);
-			}
-		}
-	}
-
-	p {
-		margin: 0;
+	> div {
+		width: min(640px, calc(100vw - 2rem));
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 }

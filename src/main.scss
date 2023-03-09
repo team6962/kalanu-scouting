@@ -1,4 +1,3 @@
-@import url('https://use.typekit.net/zsi8dan.css');
 @import './vars.scss';
 
 body {
@@ -12,8 +11,4 @@ body {
 
 	color: $black;
 	background-color: $white;
-}
-
-:disabled {
-	filter: blur(2px);
 }

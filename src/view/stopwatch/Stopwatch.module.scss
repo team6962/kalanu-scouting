@@ -1,0 +1,17 @@
+.stopwatch {
+	display: grid;
+	grid-template-columns: max-content auto;
+	gap: 1rem;
+
+	> p {
+		display: inline-flex;
+		align-items: center;
+		margin: 0;
+	}
+
+	> svg {
+		border-radius: 0.25rem;
+		height: 100%;
+		width: 100%;
+	}
+}
