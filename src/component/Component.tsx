@@ -32,9 +32,9 @@ export const Component: React.FC<ComponentProps> = ({ component, state, phase, s
 					events: [
 						{
 							id: component.eventId || component.id,
-							time: component.includeTime ? Date.now() : undefined,
-							phase: phase ? phase.id : undefined,
-							payload: component.eventPayload
+							time: component.includeTime ? Date.now() : null,
+							phase: phase ? phase.id : null,
+							payload: component.eventPayload || null
 						},
 						...state.events
 					]

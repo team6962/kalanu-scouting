@@ -19,9 +19,9 @@ interface ViewProps {
 
 export type ViewEvent = {
 	id: string;
-	phase?: string;
-	time?: number;
-	payload?: JsonSerializable;
+	phase: string | null;
+	time: number | null;
+	payload: JsonSerializable | null;
 };
 
 const resolveTimerPhase = (time: number, view: ViewSchema): TimerPhase | null => {

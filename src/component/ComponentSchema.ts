@@ -49,7 +49,7 @@ export type ComponentSchema = {
 			/**
 			 * optional additional data to include in the event.
 			 * relevant if multiple buttons produce variations of a single event.
-			 * @default undefined
+			 * @default null
 			 */
 			eventPayload?: Operator;
 			/**
