@@ -1,3 +1,4 @@
+import structuredClone from '@ungap/structured-clone';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { EventSimple } from '../api/types';
@@ -6,8 +7,8 @@ import { FlowSchema } from '../flow/FlowSchema';
 import { Model2023 } from '../Model2023';
 import { Setup, SetupInfo } from '../setup/Setup';
 import { Status } from '../status/Status';
-import { useLocalStorage } from './useLocalStorage';
 import { ReportState } from './ReportState';
+import { useLocalStorage } from './useLocalStorage';
 
 import * as styles from './Report.module.scss';
 
