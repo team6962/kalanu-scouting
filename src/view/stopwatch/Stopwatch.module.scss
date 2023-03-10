@@ -2,6 +2,7 @@
 	display: grid;
 	grid-template-columns: max-content auto;
 	gap: 1rem;
+	max-height: 50px;
 
 	> p {
 		display: inline-flex;
