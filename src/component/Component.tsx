@@ -26,7 +26,7 @@ export const Component: React.FC<ComponentProps> = ({
 	const resolve = (operator: Operator) =>
 		resolveOperator(operator, state, { phase: phase ? phase.id : null });
 
-	const name = resolve(component.name);
+	const name = component.name ? resolve(component.name) : component.id;
 	assertString(name);
 
 	const disabled =
@@ -116,5 +116,10 @@ export const Component: React.FC<ComponentProps> = ({
 					disabled={disabled}
 				/>
 			);
+		case ComponentSchemaType.StaticText:
+			const value = resolve(component.value);
+			assertString(value);
+
+			return <p className={styles.staticText}>{value}</p>;
 	}
 };

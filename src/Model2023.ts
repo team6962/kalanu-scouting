@@ -2,7 +2,7 @@ import { Operator } from 'renegade';
 import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
 
-const scoreDisabled: Operator = {
+const noPieceHeld: Operator = {
 	$let: {
 		// find index of most recent time we scored and picked up a piece
 		vars: {
@@ -106,6 +106,49 @@ const currentlyEngaged: Operator = {
 	]
 };
 
+const timesScored: Operator = {
+	$size: {
+		$filter: {
+			input: '$events',
+			cond: {
+				$eq: ['$$this.id', 'score']
+			}
+		}
+	}
+};
+
+const timesPickedUp: Operator = {
+	$size: {
+		$filter: {
+			input: '$events',
+			cond: {
+				$eq: ['$$this.id', 'pickup']
+			}
+		}
+	}
+};
+
+const timesFumbled: Operator = {
+	$let: {
+		vars: {
+			fumbled: { $subtract: [timesPickedUp, timesScored] }
+		},
+		in: {
+			$cond: {
+				if: { $eq: ['$$fumbled', 0] },
+				then: 0,
+				else: {
+					$cond: {
+						if: noPieceHeld,
+						then: '$$fumbled',
+						else: { $subtract: ['$$fumbled', 1] }
+					}
+				}
+			}
+		}
+	}
+};
+
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
 	flows: [
@@ -139,7 +182,7 @@ export const Model2023: ModelSchema = {
 						id: 'bottomScore',
 						eventId: 'score',
 						eventPayload: { level: 1 },
-						disabled: { $or: [scoreDisabled, currentlyDocked] }
+						disabled: { $or: [noPieceHeld, currentlyDocked] }
 					},
 					{
 						type: ComponentSchemaType.Event,
@@ -147,7 +190,7 @@ export const Model2023: ModelSchema = {
 						id: 'middleScore',
 						eventId: 'score',
 						eventPayload: { level: 2 },
-						disabled: { $or: [scoreDisabled, currentlyDocked] }
+						disabled: { $or: [noPieceHeld, currentlyDocked] }
 					},
 					{
 						type: ComponentSchemaType.Event,
@@ -155,7 +198,7 @@ export const Model2023: ModelSchema = {
 						id: 'topScore',
 						eventId: 'score',
 						eventPayload: { level: 3 },
-						disabled: { $or: [scoreDisabled, currentlyDocked] }
+						disabled: { $or: [noPieceHeld, currentlyDocked] }
 					},
 					{
 						type: ComponentSchemaType.Event,
@@ -189,13 +232,35 @@ export const Model2023: ModelSchema = {
 								currentlyEngaged
 							]
 						}
+					},
+					{
+						type: ComponentSchemaType.StaticText,
+						id: 'timesPickedUp',
+						value: {
+							$concat: ['pieces collected: ', timesPickedUp]
+						}
+					},
+					{
+						type: ComponentSchemaType.StaticText,
+						id: 'timesScored',
+						value: {
+							$concat: ['pieces scored: ', timesScored]
+						}
+					},
+					{
+						type: ComponentSchemaType.StaticText,
+						id: 'timesFumbled',
+						value: {
+							$concat: ['pieces fumbled: ', timesFumbled]
+						}
 					}
 				],
 
 				layout: [
 					['boxPickup', 'conePickup'],
 					['bottomScore', 'middleScore', 'topScore'],
-					['docking', 'engaging']
+					['docking', 'engaging'],
+					['timesPickedUp', 'timesScored', 'timesFumbled']
 				],
 
 				options: {

@@ -1,4 +1,4 @@
-import { Operator } from 'renegade';
+import { JsonSerializable, Operator } from 'renegade';
 
 export enum ComponentSchemaType {
 	/**
@@ -10,13 +10,17 @@ export enum ComponentSchemaType {
 	 */
 	Toggle = 'toggle',
 	/**
-	 * represents text. displayed as a one-line input.
+	 * represents editable text. displayed as a one-line input.
 	 */
 	Text = 'text',
 	/**
-	 * represents text. displayed as a textarea.
+	 * represents editable text. displayed as a textarea.
 	 */
-	LongText = 'longtext'
+	LongText = 'longtext',
+	/**
+	 * represents static text, to display a message a value.
+	 */
+	StaticText = 'statictext'
 }
 
 export type ComponentSchema = {
@@ -27,7 +31,7 @@ export type ComponentSchema = {
 	/**
 	 * displayed to the user.
 	 */
-	name: Operator;
+	name?: Operator;
 	/**
 	 * recorded internally and used for layouting.
 	 */
@@ -75,5 +79,12 @@ export type ComponentSchema = {
 			 * @default ''
 			 */
 			default?: string;
+	  }
+	| {
+			type: ComponentSchemaType.StaticText;
+			/**
+			 * the value displayed to the user
+			 */
+			value: Operator;
 	  }
 );
