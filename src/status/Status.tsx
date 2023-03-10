@@ -3,6 +3,7 @@ import { Dispatch, useState } from 'react';
 import { ReportState } from '../report/ReportState';
 import { firestore } from './firebase';
 import { useIsOnline } from './useIsOnline';
+import { version } from '../../package.json';
 
 import * as styles from './Status.module.scss';
 
@@ -37,6 +38,7 @@ export const Status: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {
 		<div className={styles.sync}>
 			<div>
 				<p>
+					{`kalanu v${version} `}
 					{online ? 'online.' : 'offline.'}
 					{reports.length > 0
 						? ` ${reports.length} report${
