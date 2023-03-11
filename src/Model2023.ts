@@ -149,6 +149,32 @@ const timesFumbled: Operator = {
 	}
 };
 
+const heldPiece: Operator = {
+	$let: {
+		vars: {
+			event: {
+				$first: {
+					$filter: {
+						input: '$events',
+						cond: {
+							$eq: ['$$this.id', 'pickup']
+						}
+					}
+				}
+			}
+		},
+		in: {
+			$cond: {
+				if: {
+					$or: [noPieceHeld, { $eq: ['$$event', null] }]
+				},
+				then: null,
+				else: '$$event.payload.piece'
+			}
+		}
+	}
+};
+
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
 	flows: [
@@ -162,11 +188,20 @@ export const Model2023: ModelSchema = {
 				components: [
 					{
 						type: ComponentSchemaType.Event,
-						name: 'box',
-						id: 'boxPickup',
+						name: 'cube',
+						id: 'cubePickup',
 						eventId: 'pickup',
-						eventPayload: { piece: 'box' },
-						disabled: currentlyDocked
+						eventPayload: { piece: 'cube' },
+						disabled: currentlyDocked,
+						color: {
+							$cond: {
+								if: {
+									$eq: [heldPiece, 'cube']
+								},
+								then: '#c48fc2',
+								else: '#d8dada'
+							}
+						}
 					},
 					{
 						type: ComponentSchemaType.Event,
@@ -174,7 +209,16 @@ export const Model2023: ModelSchema = {
 						id: 'conePickup',
 						eventId: 'pickup',
 						eventPayload: { piece: 'cone' },
-						disabled: currentlyDocked
+						disabled: currentlyDocked,
+						color: {
+							$cond: {
+								if: {
+									$eq: [heldPiece, 'cone']
+								},
+								then: '#c59849',
+								else: '#d8dada'
+							}
+						}
 					},
 					{
 						type: ComponentSchemaType.Event,
@@ -257,7 +301,7 @@ export const Model2023: ModelSchema = {
 				],
 
 				layout: [
-					['boxPickup', 'conePickup'],
+					['cubePickup', 'conePickup'],
 					['bottomScore', 'middleScore', 'topScore'],
 					['docking', 'engaging'],
 					['timesPickedUp', 'timesScored', 'timesFumbled']

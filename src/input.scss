@@ -14,7 +14,7 @@
 	align-items: center;
 	justify-content: center;
 
-	transition-property: filter, transform;
+	transition-property: filter, transform, background-color;
 	transition-duration: 0.1s;
 
 	&:disabled {

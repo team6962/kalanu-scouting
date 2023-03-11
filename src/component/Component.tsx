@@ -36,12 +36,15 @@ export const Component: React.FC<ComponentProps> = ({
 	switch (component.type) {
 		case ComponentSchemaType.Event:
 			const handleEvent = () => {
+				const includeTime =
+					component.includeTime === undefined ? true : component.includeTime;
+
 				setState({
 					...state,
 					events: [
 						{
 							id: component.eventId || component.id,
-							time: component.includeTime ? Date.now() : null,
+							time: includeTime ? (Date.now() - state.start) / 1000 : null,
 							phase: phase ? phase.id : null,
 							payload: component.eventPayload || null
 						},
@@ -50,7 +53,18 @@ export const Component: React.FC<ComponentProps> = ({
 				});
 			};
 
-			return <input type="button" value={name} onClick={handleEvent} disabled={disabled} />;
+			const backgroundColor = component.color ? resolve(component.color) : '#d8dada';
+			assertString(backgroundColor);
+
+			return (
+				<input
+					type="button"
+					value={name}
+					onClick={handleEvent}
+					disabled={disabled}
+					style={{ backgroundColor }}
+				/>
+			);
 		case ComponentSchemaType.Toggle:
 			const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
 				setState({

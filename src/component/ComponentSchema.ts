@@ -1,4 +1,4 @@
-import { JsonSerializable, Operator } from 'renegade';
+import { Operator } from 'renegade';
 
 export enum ComponentSchemaType {
 	/**
@@ -63,6 +63,11 @@ export type ComponentSchema = {
 			 * @default true
 			 */
 			includeTime?: boolean;
+			/**
+			 * the background color of the button.
+			 * @default '#d8dada'
+			 */
+			color?: Operator;
 	  }
 	| {
 			type: ComponentSchemaType.Toggle;
