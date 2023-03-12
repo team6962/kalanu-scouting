@@ -39,8 +39,8 @@ export default defineConfig({
 						purpose: 'maskable'
 					}
 				],
-				theme_color: '#444444',
-				background_color: '#444444',
+				theme_color: '#ededed',
+				background_color: '#ededed',
 				display: 'standalone'
 			},
 
