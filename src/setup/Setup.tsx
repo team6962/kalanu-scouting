@@ -88,7 +88,7 @@ export const Setup: React.FC<SetupProps> = ({
 						year === null ||
 						event === null ||
 						team === null ||
-						(requiresMatch ? false : match === null);
+						(requiresMatch ? match === null : false);
 
 					return (
 						<input
