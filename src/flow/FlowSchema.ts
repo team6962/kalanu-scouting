@@ -31,6 +31,11 @@ export interface FlowOptions {
 	 * @default []
 	 */
 	timerPhases?: TimerPhase[];
+	/**
+	 * whether this flow needs a valid chosen match to be selected.
+	 * @default true
+	 */
+	requiresMatch?: boolean;
 }
 
 export interface FlowSchema {

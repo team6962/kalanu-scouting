@@ -80,17 +80,26 @@ export const Setup: React.FC<SetupProps> = ({
 				</>
 			)}
 			<div className={styles.flowPicker}>
-				{model.flows.map((flow) => (
-					<input
-						key={flow.id}
-						type="button"
-						value={`start ${flow.name}`}
-						disabled={
-							year === null || event === null || team === null || match === null
-						}
-						onClick={() => onFlowStart(flow)}
-					/>
-				))}
+				{model.flows.map((flow) => {
+					const requiresMatch = flow.options
+						? flow.options.requiresMatch === undefined || flow.options.requiresMatch
+						: true;
+					const disabled =
+						year === null ||
+						event === null ||
+						team === null ||
+						(requiresMatch ? false : match === null);
+
+					return (
+						<input
+							key={flow.id}
+							type="button"
+							value={`start ${flow.name}`}
+							disabled={disabled}
+							onClick={() => onFlowStart(flow)}
+						/>
+					);
+				})}
 			</div>
 		</div>
 	);
