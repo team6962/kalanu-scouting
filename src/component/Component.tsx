@@ -1,5 +1,12 @@
-import { ChangeEvent, Dispatch } from 'react';
-import { assertBoolean, assertString, Operator, resolveOperator } from 'renegade-js';
+import { ChangeEvent } from 'react';
+import {
+	assertBoolean,
+	assertObject,
+	assertString,
+	JsonSerializable,
+	Operator,
+	resolveOperator
+} from 'renegade-js';
 import { FlowState } from '../flow/Flow';
 import { TimerPhase } from '../view/ViewSchema';
 import { ComponentSchema, ComponentSchemaType } from './ComponentSchema';
@@ -13,7 +20,7 @@ interface ComponentProps {
 	disabled?: boolean;
 
 	state: FlowState;
-	setState: Dispatch<FlowState>;
+	setState: (state: FlowState) => void;
 }
 
 export const Component: React.FC<ComponentProps> = ({
@@ -39,6 +46,9 @@ export const Component: React.FC<ComponentProps> = ({
 				const includeTime =
 					component.includeTime === undefined ? true : component.includeTime;
 
+				const payload = component.eventPayload ? resolve(component.eventPayload) : null;
+				if (payload !== null) assertObject(payload);
+
 				setState({
 					...state,
 					events: [
@@ -46,7 +56,7 @@ export const Component: React.FC<ComponentProps> = ({
 							id: component.eventId || component.id,
 							time: includeTime ? (Date.now() - state.start) / 1000 : null,
 							phase: phase ? phase.id : null,
-							payload: component.eventPayload || null
+							payload: payload as Record<string, JsonSerializable>
 						},
 						...state.events
 					]
@@ -77,7 +87,7 @@ export const Component: React.FC<ComponentProps> = ({
 			};
 
 			return (
-				<label className={styles.toggle}>
+				<label className={`${styles.toggle} ${disabled ? styles.disabled : ''}`}>
 					<input
 						type="checkbox"
 						checked={state.data[component.id] as boolean}

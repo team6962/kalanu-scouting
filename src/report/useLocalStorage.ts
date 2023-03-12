@@ -1,9 +1,9 @@
-import { Dispatch, useState } from 'react';
+import { useState } from 'react';
 
 export const useLocalStorage = <T extends unknown>(
 	key: string,
 	initialValue: T
-): [T, Dispatch<T>] => {
+): [T, (value: T) => void] => {
 	// if value exists in local storage, use that instead of initialValue
 	const loaded = localStorage.getItem(key);
 	const [value, setValue] = useState<T>(loaded === null ? initialValue! : JSON.parse(loaded));

@@ -1,13 +1,16 @@
-import { Dispatch, useState } from 'react';
+import { useState } from 'react';
 import { ComponentSchemaType } from '../component/ComponentSchema';
 import { View, ViewEvent } from '../view/View';
 import { ViewSchema } from '../view/ViewSchema';
-import { FlowSchema, TimerPhase } from './FlowSchema';
+import { FlowSchema } from './FlowSchema';
+
+import * as styles from './Flow.module.scss';
 
 interface FlowProps {
 	flow: FlowSchema;
 	initialState?: FlowState;
-	onSubmit?: Dispatch<FlowState>;
+	onSubmit?: (state: FlowState) => void;
+	onExit?: () => void;
 }
 
 export type FlowState = {
@@ -26,19 +29,7 @@ const reduceViewToInitialData = (view: ViewSchema): FlowState['data'] => {
 	return data;
 };
 
-const resolveTimerPhase = (time: number, flow: FlowSchema): TimerPhase | null => {
-	if (flow.options === undefined) return null;
-	if (flow.options.timerPhases === undefined) return null;
-
-	let currentTime = 0;
-	for (const phase of flow.options.timerPhases) {
-		if (currentTime + phase.length > time) return phase;
-		else currentTime += phase.length;
-	}
-	return null;
-};
-
-export const Flow: React.FC<FlowProps> = ({ flow, initialState, onSubmit }) => {
+export const Flow: React.FC<FlowProps> = ({ flow, initialState, onSubmit, onExit }) => {
 	if (initialState === undefined) {
 		let data: FlowState['data'] = {};
 		if (flow.views instanceof Array) {
@@ -55,18 +46,46 @@ export const Flow: React.FC<FlowProps> = ({ flow, initialState, onSubmit }) => {
 	const [state, setState] = useState<FlowState>(initialState);
 	const [view, setView] = useState(0);
 
-	const onExit = () => {
-		const useSubmit = flow.views instanceof Array ? view === flow.views.length - 1 : true;
-		if (useSubmit) return onSubmit !== undefined && onSubmit(state);
-		else return setView(view + 1);
-	};
+	let current: ViewSchema = flow.views instanceof Array ? flow.views[view] : flow.views;
+	let previous: ViewSchema | null = null;
+	let next: ViewSchema | null = null;
+
+	if (flow.views instanceof Array) {
+		if (view > 0) previous = flow.views[view - 1];
+		if (view < flow.views.length - 1) next = flow.views[view + 1];
+	}
 
 	return (
-		<View
-			state={state}
-			setState={setState}
-			view={flow.views instanceof Array ? flow.views[view] : flow.views}
-			onExit={onExit}
-		/>
+		<div className={styles.flow}>
+			<View state={state} setState={setState} view={current} />
+			<div className={styles.controls}>
+				{previous ? (
+					<input
+						type="button"
+						value={`return to ${previous.name || previous.id}`}
+						onClick={() => setView(view - 1)}
+					/>
+				) : (
+					<input
+						type="button"
+						value={`cancel report`}
+						onClick={() => onExit && onExit()}
+					/>
+				)}
+				{next ? (
+					<input
+						type="button"
+						value={`continue to ${next.name || next.id}`}
+						onClick={() => setView(view + 1)}
+					/>
+				) : (
+					<input
+						type="button"
+						value={`submit report`}
+						onClick={() => onSubmit && onSubmit(state)}
+					/>
+				)}
+			</div>
+		</div>
 	);
 };

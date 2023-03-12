@@ -1,0 +1,17 @@
+@import '../input.scss';
+
+.flow {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	.controls {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+
+		> input {
+			@include input;
+		}
+	}
+}

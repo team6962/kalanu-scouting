@@ -17,6 +17,10 @@
 	gap: 0.5rem;
 
 	cursor: pointer;
+
+	&.disabled {
+		filter: blur(1.5px);
+	}
 }
 
 .staticText {

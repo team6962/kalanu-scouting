@@ -1,4 +1,3 @@
-import { Dispatch } from 'react';
 import { useEventTeamsSimple } from '../api/api';
 import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
 import { ComboBox, ComboPlaceholder } from './ComboBox';
@@ -8,7 +7,7 @@ import * as styles from './ComboBox.module.scss';
 interface TeamComboProps {
 	event: EventSimple;
 	value: TeamSimple | null;
-	onChange: Dispatch<TeamSimple | null>;
+	onChange: (team: TeamSimple | null) => void;
 	match?: MatchSimple | null;
 	disabled?: boolean;
 }

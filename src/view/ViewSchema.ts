@@ -1,3 +1,4 @@
+import { Operator } from 'renegade-js';
 import { ComponentSchema } from '../component/ComponentSchema';
 
 export interface TimerPhase {
@@ -69,7 +70,7 @@ export interface ViewSchema {
 	 * an array of arrays containing component ids.
 	 * rows do not need to be of equal length.
 	 */
-	layout: string[][];
+	layout: Operator;
 
 	/**
 	 * additional options to control how the view behaves.

@@ -10,53 +10,68 @@ import { YearPicker } from './YearPicker';
 
 import * as styles from './Setup.module.scss';
 
-export interface SetupInfo {
-	year: number;
-	event: EventSimple;
-	match: MatchSimple;
-	team: TeamSimple;
-	flow: FlowSchema;
-}
-
 interface SetupProps {
-	initialYear?: number;
-	initialEvent?: EventSimple;
-	initialMatch?: MatchSimple;
-	initialTeam?: TeamSimple;
+	year?: number;
+	setYear?: (year: number) => void;
+	event?: EventSimple | null;
+	setEvent?: (event: EventSimple | null) => void;
+	match?: MatchSimple | null;
+	setMatch?: (match: MatchSimple | null) => void;
+	team?: TeamSimple | null;
+	setTeam?: (team: TeamSimple | null) => void;
 
-	onSubmit: (info: SetupInfo) => void;
+	onFlowStart: (flow: FlowSchema) => void;
 	model: ModelSchema | ((year: number) => ModelSchema);
 }
 
 export const Setup: React.FC<SetupProps> = ({
-	initialYear,
-	initialEvent,
-	initialMatch,
-	initialTeam,
-	onSubmit,
+	year,
+	setYear,
+	event,
+	setEvent,
+	match,
+	setMatch,
+	team,
+	setTeam,
+
+	onFlowStart,
 	model: modelGetter
 }) => {
-	const [year, setYear] = useState(initialYear || new Date().getFullYear());
-	const [event, setEvent] = useState<EventSimple | null>(initialEvent || null);
-	const [match, setMatch] = useState<MatchSimple | null>(initialMatch || null);
-	const [team, setTeam] = useState<TeamSimple | null>(initialTeam || null);
+	if (year === undefined) [year, setYear] = useState(new Date().getFullYear());
+	if (event === undefined) [event, setEvent] = useState<EventSimple | null>(null);
+	if (match === undefined) [match, setMatch] = useState<MatchSimple | null>(null);
+	if (team === undefined) [team, setTeam] = useState<TeamSimple | null>(null);
 
-	const model = modelGetter instanceof Function ? modelGetter(year) : modelGetter;
+	const model = modelGetter instanceof Function ? modelGetter(year!) : modelGetter;
 
 	return (
 		<div className={styles.pregame}>
 			<div className={styles.yearAndEvent}>
-				<YearPicker year={year} setYear={setYear} />
+				<YearPicker year={year!} setYear={(year) => setYear && setYear(year)} />
 				{year !== null ? (
-					<EventCombo year={year} value={event} onChange={setEvent} />
+					<EventCombo
+						year={year!}
+						value={event!}
+						onChange={(event) => setEvent && setEvent(event)}
+					/>
 				) : (
 					<ComboPlaceholder placeholder="event" />
 				)}
 			</div>
 			{event !== null ? (
 				<>
-					<MatchCombo event={event} value={match} onChange={setMatch} team={team} />
-					<TeamCombo event={event} value={team} onChange={setTeam} match={match} />
+					<MatchCombo
+						event={event}
+						value={match}
+						onChange={(match) => setMatch && setMatch(match)}
+						team={team}
+					/>
+					<TeamCombo
+						event={event}
+						value={team}
+						onChange={(team) => setTeam && setTeam(team)}
+						match={match}
+					/>
 				</>
 			) : (
 				<>
@@ -73,7 +88,7 @@ export const Setup: React.FC<SetupProps> = ({
 						disabled={
 							year === null || event === null || team === null || match === null
 						}
-						onClick={() => onSubmit({ year, event, match, team, flow } as SetupInfo)}
+						onClick={() => onFlowStart(flow)}
 					/>
 				))}
 			</div>

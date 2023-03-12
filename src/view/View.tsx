@@ -1,5 +1,10 @@
-import { Dispatch, useState } from 'react';
-import { JsonSerializable } from 'renegade-js';
+import {
+	assertArray,
+	assertString,
+	JsonSerializable,
+	Operator,
+	resolveOperator
+} from 'renegade-js';
 import { Component } from '../component/Component';
 import { FlowState } from '../flow/Flow';
 import { Stopwatch } from './stopwatch/Stopwatch';
@@ -12,16 +17,14 @@ interface ViewProps {
 	view: ViewSchema;
 
 	state: FlowState;
-	setState: Dispatch<FlowState>;
-
-	onExit?: () => void;
+	setState: (state: FlowState) => void;
 }
 
 export type ViewEvent = {
 	id: string;
 	phase: string | null;
 	time: number | null;
-	payload: JsonSerializable | null;
+	payload: Record<string, JsonSerializable> | null;
 };
 
 const resolveTimerPhase = (time: number, view: ViewSchema): TimerPhase | null => {
@@ -36,13 +39,23 @@ const resolveTimerPhase = (time: number, view: ViewSchema): TimerPhase | null =>
 	return null;
 };
 
-export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => {
+export const View: React.FC<ViewProps> = ({ view, state, setState }) => {
 	const time = useStopwatch(100, state.start);
 	const phase = resolveTimerPhase(time, view);
 
-	const handleExit = () => {
-		if (onExit) onExit();
-	};
+	const resolve = (operator: Operator) =>
+		resolveOperator(operator, state, { phase: phase ? phase.id : null });
+
+	const rows = resolve(view.layout);
+	assertArray(rows);
+	const layout = rows.map((row) => {
+		assertArray(row);
+		return row.map((item) => {
+			if (item === null) return null;
+			assertString(item);
+			return item;
+		});
+	});
 
 	const handleUndo = () => {
 		setState({
@@ -94,21 +107,21 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 				</div>
 			) : null}
 
-			{view.layout.map((row, i) => (
+			{layout.map((row, i) => (
 				<div key={i}>
-					{row.map((key: string) => (
-						<Component
-							key={key}
-							component={view.components.find((comp) => comp.id === key)!}
-							phase={phase}
-							state={state}
-							setState={setState}
-						/>
-					))}
+					{row.map((key) =>
+						key ? (
+							<Component
+								key={key}
+								component={view.components.find((comp) => comp.id === key)!}
+								phase={phase}
+								state={state}
+								setState={setState}
+							/>
+						) : null
+					)}
 				</div>
 			))}
-
-			<input type="button" value={`end ${view.name || view.id}`} onClick={handleExit} />
 		</div>
 	);
 };

@@ -1,8 +1,8 @@
-import { ChangeEvent, Dispatch } from 'react';
+import { ChangeEvent } from 'react';
 
 interface YearPickerProps {
 	year: number;
-	setYear: Dispatch<number>;
+	setYear: (year: number) => void;
 }
 
 export const YearPicker: React.FC<YearPickerProps> = ({ year, setYear }) => {

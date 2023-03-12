@@ -192,13 +192,18 @@ const evalView: ViewSchema = {
 			id: 'parked'
 		},
 		{
+			type: ComponentSchemaType.Toggle,
+			name: 'unwieldy',
+			id: 'unwieldy'
+		},
+		{
 			type: ComponentSchemaType.LongText,
 			name: 'notes',
 			id: 'notes'
 		}
 	],
 
-	layout: [['fouled', 'parked'], ['notes']],
+	layout: [['fouled', 'parked', 'unwieldy'], ['notes']],
 
 	options: {
 		showTimer: false,
@@ -254,26 +259,26 @@ export const Model2023: ModelSchema = {
 						},
 						{
 							type: ComponentSchemaType.Event,
-							name: '1',
+							name: 'bottom',
 							id: 'bottomScore',
 							eventId: 'score',
-							eventPayload: { level: 1 },
+							eventPayload: { level: 1, piece: heldPiece },
 							disabled: { $or: [noPieceHeld, currentlyDocked] }
 						},
 						{
 							type: ComponentSchemaType.Event,
-							name: '2',
+							name: 'middle',
 							id: 'middleScore',
 							eventId: 'score',
-							eventPayload: { level: 2 },
+							eventPayload: { level: 2, piece: heldPiece },
 							disabled: { $or: [noPieceHeld, currentlyDocked] }
 						},
 						{
 							type: ComponentSchemaType.Event,
-							name: '3',
+							name: 'top',
 							id: 'topScore',
 							eventId: 'score',
-							eventPayload: { level: 3 },
+							eventPayload: { level: 3, piece: heldPiece },
 							disabled: { $or: [noPieceHeld, currentlyDocked] }
 						},
 						{
@@ -310,6 +315,14 @@ export const Model2023: ModelSchema = {
 							}
 						},
 						{
+							type: ComponentSchemaType.Toggle,
+							id: 'leftCommunity',
+							name: 'left community',
+							disabled: {
+								$ne: ['$$phase', 'auton']
+							}
+						},
+						{
 							type: ComponentSchemaType.StaticText,
 							id: 'timesPickedUp',
 							value: {
@@ -335,7 +348,7 @@ export const Model2023: ModelSchema = {
 					layout: [
 						['cubePickup', 'conePickup'],
 						['bottomScore', 'middleScore', 'topScore'],
-						['docking', 'engaging'],
+						['leftCommunity', 'docking', 'engaging'],
 						['timesPickedUp', 'timesScored', 'timesFumbled']
 					],
 

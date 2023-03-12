@@ -1,5 +1,5 @@
 import { doc, writeBatch } from 'firebase/firestore';
-import { Dispatch, useState } from 'react';
+import { useState } from 'react';
 import { ReportState } from '../report/ReportState';
 import { firestore } from './firebase';
 import { useIsOnline } from './useIsOnline';
@@ -9,7 +9,7 @@ import * as styles from './Status.module.scss';
 
 interface SyncMonitorProps {
 	reports: ReportState[];
-	setReports: Dispatch<ReportState[]>;
+	setReports: (reports: ReportState[]) => void;
 }
 
 export const Status: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {

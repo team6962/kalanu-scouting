@@ -1,6 +1,6 @@
 import type { UseComboboxStateChange } from 'downshift';
 import { useCombobox, UseComboboxState, UseComboboxStateChangeOptions } from 'downshift';
-import { Dispatch, Key, ReactElement, ReactNode, useState } from 'react';
+import { Key, ReactElement, ReactNode, useState } from 'react';
 
 import * as styles from './ComboBox.module.scss';
 
@@ -8,7 +8,7 @@ type ComboboxProps<T> = {
 	items: T[];
 
 	value: T | null;
-	onChange: Dispatch<T | null>;
+	onChange: (value: T | null) => void;
 
 	itemToString: (item: T | null) => string;
 	itemToNode?: (item: T) => string | ReactNode;

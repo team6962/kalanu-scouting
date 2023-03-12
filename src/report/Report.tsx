@@ -1,25 +1,57 @@
 import structuredClone from '@ungap/structured-clone';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
-import { EventSimple } from '../api/types';
+import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
 import { Flow, FlowState } from '../flow/Flow';
 import { FlowSchema } from '../flow/FlowSchema';
 import { Model2023 } from '../Model2023';
-import { Setup, SetupInfo } from '../setup/Setup';
+import { Setup } from '../setup/Setup';
 import { Status } from '../status/Status';
+import { ViewEvent } from '../view/View';
 import { ReportState } from './ReportState';
 import { useLocalStorage } from './useLocalStorage';
 
 import * as styles from './Report.module.scss';
+import { assertObject } from 'renegade-js';
+
+const processEvents = (events: ViewEvent[]) => {
+	const payloadKeys = new Set<string>();
+	for (const event of events) {
+		if (event.payload !== null) {
+			assertObject(event.payload);
+			for (const key in event.payload) payloadKeys.add(key);
+		}
+	}
+
+	const processedEvents: ViewEvent[] = [];
+	for (const event of events) {
+		const processedEvent: ViewEvent = {
+			id: event.id,
+			phase: event.phase,
+			time: event.time,
+			payload: {}
+		};
+
+		if (event.payload !== null) {
+			assertObject(event.payload);
+			for (const key of payloadKeys) {
+				processedEvent.payload![key] = event.payload[key] || null;
+			}
+		}
+
+		processedEvents.push(processedEvent);
+	}
+
+	processedEvents.reverse();
+
+	return processedEvents;
+};
 
 export const Report: React.FC = () => {
 	const [state, setState] = useState<'setup' | 'active'>('setup');
 	const [flow, setFlow] = useState<FlowSchema>();
 
-	const [setupInfo, setSetupInfo] = useState<Partial<SetupInfo>>();
-
 	// persist chosen year and event in localstorage so they don't need to be picked repeatedly
-	const [initialYear, setInitialYear] = useLocalStorage('initialYear', 2022);
 	const [initialEvent, setInitialEvent] = useLocalStorage<EventSimple>('initialEvent', {
 		city: 'San Francisco',
 		country: 'USA',
@@ -32,37 +64,47 @@ export const Report: React.FC = () => {
 		state_prov: 'CA',
 		year: 2022
 	});
+	const [initialYear, setInitialYear] = useLocalStorage('initialYear', initialEvent.year);
+
+	// manage setup state so cancelling a report doesn't feel awful
+	const [year, setYear] = useState(initialYear);
+	const [event, setEvent] = useState<EventSimple | null>(initialEvent);
+	const [match, setMatch] = useState<MatchSimple | null>(null);
+	const [team, setTeam] = useState<TeamSimple | null>(null);
 
 	// TODO: remove after competition
 	if (localStorage.getItem('reports') === '{}') localStorage.setItem('reports', '[]');
 
 	const [reports, setReports] = useLocalStorage<ReportState[]>('reports', []);
 
-	const onSetupSubmit = ({ year, event, match, team, flow }: SetupInfo) => {
+	const onFlowStart = (flow: FlowSchema) => {
 		setFlow(flow);
 		setState('active');
 
 		setInitialYear(year);
-		setInitialEvent(event);
-		setSetupInfo({ year, event, match, team });
+		setInitialEvent(event!);
 	};
 
 	const onFlowSubmit = (state: FlowState) => {
-		const report: Partial<ReportState> = structuredClone(state);
+		const report: Partial<ReportState> & FlowState = structuredClone(state);
 		setState('setup');
 
 		report.id = nanoid();
 		report.modelId = Model2023.id;
 		report.flowId = flow?.id;
 
-		report.year = setupInfo?.year;
-		report.eventId = setupInfo?.event?.key;
-		report.matchId = setupInfo?.match?.key;
-		report.teamId = setupInfo?.team?.key;
+		report.year = year;
+		report.eventId = event?.key;
+		report.matchId = match?.key;
+		report.teamId = team?.key;
 
-		report.events?.reverse();
+		report.events = processEvents(report.events!);
 
 		setReports([...reports, report as ReportState]);
+	};
+
+	const onFlowExit = () => {
+		setState('setup');
 	};
 
 	return (
@@ -71,13 +113,21 @@ export const Report: React.FC = () => {
 				<Status reports={reports} setReports={setReports} />
 				{state === 'setup' ? (
 					<Setup
-						initialYear={initialYear}
-						initialEvent={initialEvent}
-						onSubmit={onSetupSubmit}
+						year={year}
+						setYear={setYear}
+						event={event}
+						setEvent={setEvent}
+						match={match}
+						setMatch={setMatch}
+						team={team}
+						setTeam={setTeam}
+						onFlowStart={onFlowStart}
 						model={Model2023}
 					/>
 				) : null}
-				{state === 'active' ? <Flow flow={flow!} onSubmit={onFlowSubmit} /> : null}
+				{state === 'active' ? (
+					<Flow flow={flow!} onSubmit={onFlowSubmit} onExit={onFlowExit} />
+				) : null}
 			</div>
 		</div>
 	);
