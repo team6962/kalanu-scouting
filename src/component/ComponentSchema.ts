@@ -1,4 +1,4 @@
-import { Operator } from 'renegade';
+import { Operator } from 'renegade-js';
 
 export enum ComponentSchemaType {
 	/**

@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch } from 'react';
-import { assertBoolean, assertString, Operator, resolveOperator } from 'renegade';
+import { assertBoolean, assertString, Operator, resolveOperator } from 'renegade-js';
 import { FlowState } from '../flow/Flow';
 import { TimerPhase } from '../view/ViewSchema';
 import { ComponentSchema, ComponentSchemaType } from './ComponentSchema';

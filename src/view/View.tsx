@@ -1,5 +1,5 @@
 import { Dispatch, useState } from 'react';
-import { JsonSerializable } from 'renegade';
+import { JsonSerializable } from 'renegade-js';
 import { Component } from '../component/Component';
 import { FlowState } from '../flow/Flow';
 import { Stopwatch } from './stopwatch/Stopwatch';

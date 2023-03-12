@@ -1,4 +1,4 @@
-import { Operator } from 'renegade';
+import { Operator } from 'renegade-js';
 import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
 
