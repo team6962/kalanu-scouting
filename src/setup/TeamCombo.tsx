@@ -1,8 +1,8 @@
 import { useEventTeamsSimple } from '../api/api';
 import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
-import { ComboBox, ComboPlaceholder } from './ComboBox';
+import { ComboBox, ComboPlaceholder } from '../comboBox/ComboBox';
 
-import * as styles from './ComboBox.module.scss';
+import * as styles from '../comboBox/ComboBox.module.scss';
 
 interface TeamComboProps {
 	event: EventSimple;

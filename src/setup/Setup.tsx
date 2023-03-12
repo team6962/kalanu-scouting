@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
 import { FlowSchema } from '../flow/FlowSchema';
 import { ModelSchema } from '../model/ModelSchema';
-import { ComboPlaceholder } from './ComboBox';
+import { ComboPlaceholder } from '../comboBox/ComboBox';
 import { EventCombo } from './EventCombo';
 import { MatchCombo } from './MatchCombo';
 import { TeamCombo } from './TeamCombo';

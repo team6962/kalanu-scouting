@@ -25,7 +25,8 @@ const reduceViewToInitialData = (view: ViewSchema): FlowState['data'] => {
 		if (comp.type === ComponentSchemaType.Toggle) data[comp.id] = comp.default || false;
 		if (comp.type === ComponentSchemaType.Text || comp.type === ComponentSchemaType.LongText)
 			data[comp.id] = comp.default || '';
-		if (comp.type === ComponentSchemaType.Number) data[comp.id] = comp.default || null;
+		if (comp.type === ComponentSchemaType.Number || comp.type === ComponentSchemaType.ComboBox)
+			data[comp.id] = comp.default || null;
 	}
 	return data;
 };

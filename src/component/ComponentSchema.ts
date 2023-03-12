@@ -24,7 +24,11 @@ export enum ComponentSchemaType {
 	/**
 	 * represents a number. displayed as an input[type="number"].
 	 */
-	Number = 'number'
+	Number = 'number',
+	/**
+	 * represents a multiple-choice combobox. displayed as the ones in report setup.
+	 */
+	ComboBox = 'combobox'
 }
 
 export type ComponentSchema = {
@@ -111,5 +115,16 @@ export type ComponentSchema = {
 			 * maximum value
 			 */
 			max?: Operator;
+	  }
+	| {
+			type: ComponentSchemaType.ComboBox;
+			/**
+			 * an array of possible strings
+			 */
+			choices: Operator;
+			/**
+			 * the default value of the combobox
+			 */
+			default?: string;
 	  }
 );

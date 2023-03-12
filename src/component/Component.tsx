@@ -1,5 +1,6 @@
 import { ChangeEvent } from 'react';
 import {
+	assertArray,
 	assertBoolean,
 	assertNumber,
 	assertObject,
@@ -8,6 +9,7 @@ import {
 	Operator,
 	resolveOperator
 } from 'renegade-js';
+import { ComboBox } from '../comboBox/ComboBox';
 import { FlowState } from '../flow/Flow';
 import { TimerPhase } from '../view/ViewSchema';
 import { ComponentSchema, ComponentSchemaType } from './ComponentSchema';
@@ -192,6 +194,38 @@ export const Component: React.FC<ComponentProps> = ({
 					placeholder={name}
 				/>
 				// </label>
+			);
+
+		case ComponentSchemaType.ComboBox:
+			const handleComboBox = (value: string | null) => {
+				setState({
+					...state,
+					data: {
+						...state.data,
+						[component.id]: value
+					}
+				});
+			};
+
+			const itemToString = (item: string | null) => {
+				return item || '';
+			};
+
+			const choices = resolve(component.choices);
+			assertArray(choices);
+			for (const item of choices) assertString(item);
+
+			const value = state.data[component.id];
+			if (value !== null) assertString(value);
+
+			return (
+				<ComboBox
+					items={choices as string[]}
+					value={value}
+					onChange={handleComboBox}
+					itemToString={itemToString}
+					placeholder={name}
+				/>
 			);
 	}
 };

@@ -1,6 +1,6 @@
 import { useEventMatchesSimple } from '../api/api';
 import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
-import { ComboBox, ComboPlaceholder } from './ComboBox';
+import { ComboBox, ComboPlaceholder } from '../comboBox/ComboBox';
 
 const matchLevels: Record<string, string> = {
 	qm: 'Quals',

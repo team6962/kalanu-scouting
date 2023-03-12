@@ -1,6 +1,6 @@
 import { useEventsByYearSimple } from '../api/api';
 import { EventSimple } from '../api/types';
-import { ComboBox, ComboPlaceholder } from './ComboBox';
+import { ComboBox, ComboPlaceholder } from '../comboBox/ComboBox';
 
 interface EventComboProps {
 	year: number;

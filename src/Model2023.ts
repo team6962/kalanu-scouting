@@ -407,14 +407,15 @@ export const Model2023: ModelSchema = {
 						name: 'top speed (mph)'
 					},
 					{
-						type: ComponentSchemaType.StaticText,
+						type: ComponentSchemaType.ComboBox,
 						id: 'drivetrain',
-						value: 'drivetrain'
+						choices: ['tank drive', 'swerve drive', 'mecanum drive']
 					},
 					{
-						type: ComponentSchemaType.StaticText,
+						type: ComponentSchemaType.ComboBox,
 						id: 'highestGrid',
-						value: 'highest grid level'
+						name: 'highest grid level',
+						choices: ['top', 'middle', 'bottom']
 					},
 					{
 						type: ComponentSchemaType.LongText,
