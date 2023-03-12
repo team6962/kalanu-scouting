@@ -1,6 +1,7 @@
 import { Operator } from 'renegade-js';
 import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
+import { ViewSchema } from './view/ViewSchema';
 
 const noPieceHeld: Operator = {
 	$let: {
@@ -175,186 +176,191 @@ const heldPiece: Operator = {
 	}
 };
 
+const evalView: ViewSchema = {
+	id: 'eval_view',
+	name: 'team evaluation',
+
+	components: [
+		{
+			type: ComponentSchemaType.Toggle,
+			name: 'fouled',
+			id: 'fouled'
+		},
+		{
+			type: ComponentSchemaType.Toggle,
+			name: 'parked',
+			id: 'parked'
+		},
+		{
+			type: ComponentSchemaType.LongText,
+			name: 'notes',
+			id: 'notes'
+		}
+	],
+
+	layout: [['fouled', 'parked'], ['notes']],
+
+	options: {
+		showTimer: false,
+		showUndo: false
+	}
+};
+
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
 	flows: [
 		{
 			id: 'scoring',
 			name: 'team scoring',
-			views: {
-				id: 'scoring_view',
-				name: 'team scoring',
+			views: [
+				{
+					id: 'scoring_view',
+					name: 'team scoring',
 
-				components: [
-					{
-						type: ComponentSchemaType.Event,
-						name: 'cube',
-						id: 'cubePickup',
-						eventId: 'pickup',
-						eventPayload: { piece: 'cube' },
-						disabled: currentlyDocked,
-						color: {
-							$cond: {
-								if: {
-									$eq: [heldPiece, 'cube']
-								},
-								then: '#c48fc2',
-								else: '#d8dada'
-							}
-						}
-					},
-					{
-						type: ComponentSchemaType.Event,
-						name: 'cone',
-						id: 'conePickup',
-						eventId: 'pickup',
-						eventPayload: { piece: 'cone' },
-						disabled: currentlyDocked,
-						color: {
-							$cond: {
-								if: {
-									$eq: [heldPiece, 'cone']
-								},
-								then: '#c59849',
-								else: '#d8dada'
-							}
-						}
-					},
-					{
-						type: ComponentSchemaType.Event,
-						name: '1',
-						id: 'bottomScore',
-						eventId: 'score',
-						eventPayload: { level: 1 },
-						disabled: { $or: [noPieceHeld, currentlyDocked] }
-					},
-					{
-						type: ComponentSchemaType.Event,
-						name: '2',
-						id: 'middleScore',
-						eventId: 'score',
-						eventPayload: { level: 2 },
-						disabled: { $or: [noPieceHeld, currentlyDocked] }
-					},
-					{
-						type: ComponentSchemaType.Event,
-						name: '3',
-						id: 'topScore',
-						eventId: 'score',
-						eventPayload: { level: 3 },
-						disabled: { $or: [noPieceHeld, currentlyDocked] }
-					},
-					{
-						type: ComponentSchemaType.Event,
-						name: {
-							$cond: {
-								if: currentlyDocked,
-								then: 'docked',
-								else: 'dock'
+					components: [
+						{
+							type: ComponentSchemaType.Event,
+							name: 'cube',
+							id: 'cubePickup',
+							eventId: 'pickup',
+							eventPayload: { piece: 'cube' },
+							disabled: currentlyDocked,
+							color: {
+								$cond: {
+									if: {
+										$eq: [heldPiece, 'cube']
+									},
+									then: '#c48fc2',
+									else: '#d8dada'
+								}
 							}
 						},
-						id: 'docking',
-						eventId: 'dock',
-						disabled: currentlyDocked
-					},
-					{
-						type: ComponentSchemaType.Event,
-						name: {
-							$cond: {
-								if: currentlyEngaged,
-								then: 'engaged',
-								else: 'engage'
+						{
+							type: ComponentSchemaType.Event,
+							name: 'cone',
+							id: 'conePickup',
+							eventId: 'pickup',
+							eventPayload: { piece: 'cone' },
+							disabled: currentlyDocked,
+							color: {
+								$cond: {
+									if: {
+										$eq: [heldPiece, 'cone']
+									},
+									then: '#c59849',
+									else: '#d8dada'
+								}
 							}
 						},
-						id: 'engaging',
-						eventId: 'engage',
-						disabled: {
-							$or: [
-								{
-									$not: [currentlyDocked]
-								},
-								currentlyEngaged
-							]
+						{
+							type: ComponentSchemaType.Event,
+							name: '1',
+							id: 'bottomScore',
+							eventId: 'score',
+							eventPayload: { level: 1 },
+							disabled: { $or: [noPieceHeld, currentlyDocked] }
+						},
+						{
+							type: ComponentSchemaType.Event,
+							name: '2',
+							id: 'middleScore',
+							eventId: 'score',
+							eventPayload: { level: 2 },
+							disabled: { $or: [noPieceHeld, currentlyDocked] }
+						},
+						{
+							type: ComponentSchemaType.Event,
+							name: '3',
+							id: 'topScore',
+							eventId: 'score',
+							eventPayload: { level: 3 },
+							disabled: { $or: [noPieceHeld, currentlyDocked] }
+						},
+						{
+							type: ComponentSchemaType.Event,
+							name: {
+								$cond: {
+									if: currentlyDocked,
+									then: 'docked',
+									else: 'dock'
+								}
+							},
+							id: 'docking',
+							eventId: 'dock',
+							disabled: currentlyDocked
+						},
+						{
+							type: ComponentSchemaType.Event,
+							name: {
+								$cond: {
+									if: currentlyEngaged,
+									then: 'engaged',
+									else: 'engage'
+								}
+							},
+							id: 'engaging',
+							eventId: 'engage',
+							disabled: {
+								$or: [
+									{
+										$not: [currentlyDocked]
+									},
+									currentlyEngaged
+								]
+							}
+						},
+						{
+							type: ComponentSchemaType.StaticText,
+							id: 'timesPickedUp',
+							value: {
+								$concat: ['pieces collected: ', timesPickedUp]
+							}
+						},
+						{
+							type: ComponentSchemaType.StaticText,
+							id: 'timesScored',
+							value: {
+								$concat: ['pieces scored: ', timesScored]
+							}
+						},
+						{
+							type: ComponentSchemaType.StaticText,
+							id: 'timesFumbled',
+							value: {
+								$concat: ['pieces fumbled: ', timesFumbled]
+							}
 						}
-					},
-					{
-						type: ComponentSchemaType.StaticText,
-						id: 'timesPickedUp',
-						value: {
-							$concat: ['pieces collected: ', timesPickedUp]
-						}
-					},
-					{
-						type: ComponentSchemaType.StaticText,
-						id: 'timesScored',
-						value: {
-							$concat: ['pieces scored: ', timesScored]
-						}
-					},
-					{
-						type: ComponentSchemaType.StaticText,
-						id: 'timesFumbled',
-						value: {
-							$concat: ['pieces fumbled: ', timesFumbled]
-						}
+					],
+
+					layout: [
+						['cubePickup', 'conePickup'],
+						['bottomScore', 'middleScore', 'topScore'],
+						['docking', 'engaging'],
+						['timesPickedUp', 'timesScored', 'timesFumbled']
+					],
+
+					options: {
+						timerPhases: [
+							{
+								length: 15,
+								id: 'auton',
+								color: '#cb3d3b'
+							},
+							{
+								length: 135,
+								id: 'teleop',
+								color: '#4979db'
+							}
+						]
 					}
-				],
-
-				layout: [
-					['cubePickup', 'conePickup'],
-					['bottomScore', 'middleScore', 'topScore'],
-					['docking', 'engaging'],
-					['timesPickedUp', 'timesScored', 'timesFumbled']
-				],
-
-				options: {
-					timerPhases: [
-						{
-							length: 15,
-							id: 'auton',
-							color: '#cb3d3b'
-						},
-						{
-							length: 135,
-							id: 'teleop',
-							color: '#4979db'
-						}
-					]
-				}
-			}
+				},
+				evalView
+			]
 		},
 		{
 			id: 'eval',
 			name: 'team evaluation',
-			views: {
-				id: 'eval_view',
-				name: 'team evaluation',
-
-				components: [
-					{
-						type: ComponentSchemaType.Toggle,
-						name: 'fouled',
-						id: 'fouled'
-					},
-					{
-						type: ComponentSchemaType.Toggle,
-						name: 'parked',
-						id: 'parked'
-					},
-					{
-						type: ComponentSchemaType.LongText,
-						name: 'notes',
-						id: 'notes'
-					}
-				],
-
-				layout: [['fouled', 'parked'], ['notes']],
-
-				options: {
-					showTimer: false,
-					showUndo: false
-				}
-			}
+			views: evalView
 		}
 	]
 };

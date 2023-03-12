@@ -49,7 +49,7 @@ export const Report: React.FC = () => {
 
 	const onFlowSubmit = (state: FlowState) => {
 		const report: Partial<ReportState> = structuredClone(state);
-		setTimeout(() => setState('setup'), 500);
+		setState('setup');
 
 		report.id = nanoid();
 		report.modelId = Model2023.id;
@@ -59,6 +59,8 @@ export const Report: React.FC = () => {
 		report.eventId = setupInfo?.event?.key;
 		report.matchId = setupInfo?.match?.key;
 		report.teamId = setupInfo?.team?.key;
+
+		report.events?.reverse();
 
 		setReports([...reports, report as ReportState]);
 	};

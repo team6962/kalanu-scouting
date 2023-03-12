@@ -40,9 +40,7 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 	const time = useStopwatch(100, state.start);
 	const phase = resolveTimerPhase(time, view);
 
-	const [exited, setExited] = useState(false);
 	const handleExit = () => {
-		setExited(true);
 		if (onExit) onExit();
 	};
 
@@ -54,7 +52,6 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 	};
 
 	const undoDisabled = () => {
-		if (exited) return true;
 		if (state.events.length === 0) return true;
 		if (view.options && view.options.undoAcrossPhases !== true) {
 			if (state.events[0].phase === null) return false;
@@ -103,7 +100,6 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 						<Component
 							key={key}
 							component={view.components.find((comp) => comp.id === key)!}
-							disabled={exited}
 							phase={phase}
 							state={state}
 							setState={setState}
@@ -112,12 +108,7 @@ export const View: React.FC<ViewProps> = ({ view, state, setState, onExit }) => 
 				</div>
 			))}
 
-			<input
-				type="button"
-				value={`${exited ? 'ending' : 'end'} ${view.name || view.id}`}
-				onClick={handleExit}
-				disabled={exited}
-			/>
+			<input type="button" value={`end ${view.name || view.id}`} onClick={handleExit} />
 		</div>
 	);
 };
