@@ -20,7 +20,11 @@ export enum ComponentSchemaType {
 	/**
 	 * represents static text, to display a message a value.
 	 */
-	StaticText = 'statictext'
+	StaticText = 'statictext',
+	/**
+	 * represents a number. displayed as an input[type="number"].
+	 */
+	Number = 'number'
 }
 
 export type ComponentSchema = {
@@ -91,5 +95,21 @@ export type ComponentSchema = {
 			 * the value displayed to the user
 			 */
 			value: Operator;
+	  }
+	| {
+			type: ComponentSchemaType.Number;
+			/**
+			 * the default value of the number input
+			 * @default
+			 */
+			default?: number;
+			/**
+			 * minimum value
+			 */
+			min?: Operator;
+			/**
+			 * maximum value
+			 */
+			max?: Operator;
 	  }
 );

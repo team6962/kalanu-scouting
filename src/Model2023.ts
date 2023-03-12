@@ -375,6 +375,70 @@ export const Model2023: ModelSchema = {
 			id: 'eval',
 			name: 'team evaluation',
 			views: evalView
+		},
+		{
+			id: 'pit',
+			name: 'pit scouting',
+
+			views: {
+				id: 'pit_view',
+				name: 'pit scouting',
+
+				components: [
+					{
+						type: ComponentSchemaType.Toggle,
+						id: 'functional',
+						name: 'functional?',
+						default: true
+					},
+					{
+						type: ComponentSchemaType.Number,
+						id: 'weight',
+						name: 'weight (lbs)'
+					},
+					{
+						type: ComponentSchemaType.Number,
+						id: 'height',
+						name: 'height (in)'
+					},
+					{
+						type: ComponentSchemaType.Number,
+						id: 'speed',
+						name: 'top speed (mph)'
+					},
+					{
+						type: ComponentSchemaType.StaticText,
+						id: 'drivetrain',
+						value: 'drivetrain'
+					},
+					{
+						type: ComponentSchemaType.StaticText,
+						id: 'highestGrid',
+						value: 'highest grid level'
+					},
+					{
+						type: ComponentSchemaType.LongText,
+						id: 'jank',
+						name: 'jankiest part?'
+					}
+				],
+
+				layout: [
+					['functional', 'weight'],
+					['height', 'speed'],
+					['drivetrain', 'highestGrid'],
+					['jank']
+				],
+
+				options: {
+					showTimer: false,
+					showUndo: false
+				}
+			},
+
+			options: {
+				requiresMatch: false
+			}
 		}
 	]
 };

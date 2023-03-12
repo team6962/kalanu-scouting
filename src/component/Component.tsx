@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 import {
 	assertBoolean,
+	assertNumber,
 	assertObject,
 	assertString,
 	JsonSerializable,
@@ -75,6 +76,7 @@ export const Component: React.FC<ComponentProps> = ({
 					style={{ backgroundColor }}
 				/>
 			);
+
 		case ComponentSchemaType.Toggle:
 			const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
 				setState({
@@ -97,6 +99,7 @@ export const Component: React.FC<ComponentProps> = ({
 					{name}
 				</label>
 			);
+
 		case ComponentSchemaType.Text:
 			const handleText = (event: ChangeEvent<HTMLInputElement>) => {
 				setState({
@@ -120,6 +123,7 @@ export const Component: React.FC<ComponentProps> = ({
 					/>
 				</label>
 			);
+
 		case ComponentSchemaType.LongText:
 			const handleLongText = (event: ChangeEvent<HTMLTextAreaElement>) => {
 				setState({
@@ -140,10 +144,54 @@ export const Component: React.FC<ComponentProps> = ({
 					disabled={disabled}
 				/>
 			);
-		case ComponentSchemaType.StaticText:
-			const value = resolve(component.value);
-			assertString(value);
 
-			return <p className={styles.staticText}>{value}</p>;
+		case ComponentSchemaType.StaticText:
+			const staticTextValue = resolve(component.value);
+			assertString(staticTextValue);
+
+			return <p className={styles.staticText}>{staticTextValue}</p>;
+
+		case ComponentSchemaType.Number:
+			const handleNumber = (event: ChangeEvent<HTMLInputElement>) => {
+				let value: number | null = parseFloat(event.target.value);
+
+				const min = component.min ? resolve(component.min) : null;
+				if (min !== null) {
+					assertNumber(min);
+					if (value < min) value = min;
+				}
+
+				const max = component.max ? resolve(component.max) : null;
+				if (max !== null) {
+					assertNumber(max);
+					if (value > max) value = max;
+				}
+
+				if (Number.isNaN(value)) value = null;
+
+				setState({
+					...state,
+					data: {
+						...state.data,
+						[component.id]: value
+					}
+				});
+			};
+
+			let numberValue = state.data[component.id];
+			if (numberValue === null) numberValue = '';
+			else assertNumber(numberValue);
+
+			return (
+				// <label className={`${styles.number} ${disabled ? styles.disabled : ''}`}>
+				// 	<span>{name}</span>
+				<input
+					type="number"
+					value={numberValue}
+					onChange={handleNumber}
+					placeholder={name}
+				/>
+				// </label>
+			);
 	}
 };
