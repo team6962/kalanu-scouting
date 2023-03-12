@@ -1,6 +1,8 @@
 import structuredClone from '@ungap/structured-clone';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
+import { assertObject } from 'renegade-js';
+import { version } from '../../package.json';
 import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
 import { Flow, FlowState } from '../flow/Flow';
 import { FlowSchema } from '../flow/FlowSchema';
@@ -12,7 +14,6 @@ import { ReportState } from './ReportState';
 import { useLocalStorage } from './useLocalStorage';
 
 import * as styles from './Report.module.scss';
-import { assertObject } from 'renegade-js';
 
 const processEvents = (events: ViewEvent[]) => {
 	const payloadKeys = new Set<string>();
@@ -90,7 +91,9 @@ export const Report: React.FC = () => {
 		setState('setup');
 
 		report.id = nanoid();
+		report.appVersion = version;
 		report.modelId = Model2023.id;
+		report.modelVersion = Model2023.version;
 		report.flowId = flow?.id;
 
 		report.year = year;
