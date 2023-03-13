@@ -213,7 +213,7 @@ const evalView: ViewSchema = {
 
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
-	version: '1.1.0',
+	version: '1.1.1',
 	flows: [
 		{
 			id: 'scoring',
@@ -421,6 +421,31 @@ export const Model2023: ModelSchema = {
 						type: ComponentSchemaType.LongText,
 						id: 'jank',
 						name: 'jankiest part?'
+					},
+					{
+						type: ComponentSchemaType.StaticText,
+						id: 'chargingLabel',
+						value: 'charging slot:'
+					},
+					{
+						type: ComponentSchemaType.Toggle,
+						id: 'charging1',
+						name: '1st'
+					},
+					{
+						type: ComponentSchemaType.Toggle,
+						id: 'charging2',
+						name: '2nd'
+					},
+					{
+						type: ComponentSchemaType.Toggle,
+						id: 'charging3',
+						name: '3rd'
+					},
+					{
+						type: ComponentSchemaType.LongText,
+						id: 'chargingNotes',
+						name: 'charging notes?'
 					}
 				],
 
@@ -428,7 +453,9 @@ export const Model2023: ModelSchema = {
 					['functional', 'weight'],
 					['height', 'speed'],
 					['drivetrain', 'highestGrid'],
-					['jank']
+					['jank'],
+					['chargingLabel', 'charging1', 'charging2', 'charging3'],
+					['chargingNotes']
 				],
 
 				options: {
