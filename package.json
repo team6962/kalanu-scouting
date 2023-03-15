@@ -1,7 +1,7 @@
 {
 	"name": "kalanu",
 	"private": true,
-	"version": "1.2.4",
+	"version": "1.2.5",
 	"type": "module",
 	"scripts": {
 		"dev": "vite --host",
@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@ungap/structured-clone": "^1.0.2",
+		"date-fns": "^2.29.3",
 		"downshift": "^7.2.1",
 		"firebase": "^9.17.1",
 		"nanoid": "^4.0.1",

@@ -1,9 +1,11 @@
+import { format } from 'date-fns';
 import { doc, writeBatch } from 'firebase/firestore';
-import { useState } from 'react';
+import { useId, useState } from 'react';
+import { version } from '../../package.json';
+import { Model2023 } from '../Model2023';
 import { ReportState } from '../report/ReportState';
 import { firestore } from './firebase';
 import { useIsOnline } from './useIsOnline';
-import { version } from '../../package.json';
 
 import * as styles from './Status.module.scss';
 
@@ -15,11 +17,12 @@ interface SyncMonitorProps {
 export const Status: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {
 	const online = useIsOnline();
 
-	const [syncing, setSyncing] = useState(false);
+	const [popup, setPopup] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
+	const [submitting, setSubmitting] = useState(false);
 
-	const handleSync = async () => {
-		setSyncing(true);
+	const handleSubmit = async () => {
+		setSubmitting(true);
 		try {
 			const batch = writeBatch(firestore);
 			for (const report of reports) {
@@ -28,36 +31,77 @@ export const Status: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {
 			}
 			await batch.commit();
 			setReports([]);
-			setSyncing(false);
 		} catch (e) {
 			setError(e as Error);
 		}
+		setSubmitting(false);
+		setPopup(false);
 	};
 
+	const popupId = useId();
+
 	return (
-		<div className={styles.sync}>
-			<div>
-				<p>
-					{`kalanu v${version} `}
-					{online ? 'online.' : 'offline.'}
-					{reports.length > 0
-						? ` ${reports.length} report${
-								reports.length !== 1 ? 's' : ''
-						  } can be synced${online ? '' : ' after reconnecting'}.`
-						: null}
-				</p>
-				{online && reports.length > 0 ? (
-					<>
-						{error !== null ? <p>{error.message}</p> : null}
+		<>
+			<div className={styles.sync}>
+				<div>
+					<p>{`kalanu v${version}, model v${Model2023.version}.`}</p>
+					<p>{online ? 'online.' : 'offline.'}</p>
+					<p>
+						{reports.length > 0
+							? ` ${reports.length} report${
+									reports.length !== 1 ? 's' : ''
+							  } can be synced${online ? '' : ' after reconnecting'}.`
+							: null}
+					</p>
+					{online && reports.length > 0 ? (
+						<>
+							{error !== null ? <p>{error.message}</p> : null}
+							<input
+								type="button"
+								onClick={() => setPopup(true)}
+								value={popup ? 'syncing...' : 'sync'}
+								disabled={popup}
+							/>
+						</>
+					) : null}
+				</div>
+			</div>
+			<div
+				className={`${styles.syncPopup} ${popup ? styles.active : ''}`}
+				onClick={() => setPopup(false)}
+				id={popupId}
+			>
+				{popup ? (
+					<div onClick={(event) => event.stopPropagation()}>
+						<ul>
+							{reports.map((e, i) => {
+								const date = new Date(e.start);
+								const handleClick = () => {
+									const newReports = reports.slice();
+									newReports.splice(i, 1);
+									setReports(newReports);
+									if (newReports.length === 0) setPopup(false);
+								};
+
+								return (
+									<li>
+										- {e.flowId} report on {format(date, 'MMM d').toLowerCase()}{' '}
+										at {format(date, 'kk:mm')}
+										<input type="button" value="delete" onClick={handleClick} />
+									</li>
+								);
+							})}
+						</ul>
+
 						<input
 							type="button"
-							onClick={handleSync}
-							value={syncing ? 'syncing...' : 'sync now'}
-							disabled={syncing}
+							value={submitting ? 'submitting...' : 'submit'}
+							onClick={handleSubmit}
+							disabled={submitting}
 						/>
-					</>
+					</div>
 				) : null}
 			</div>
-		</div>
+		</>
 	);
 };

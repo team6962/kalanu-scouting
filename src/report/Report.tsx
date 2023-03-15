@@ -101,9 +101,9 @@ export const Report: React.FC = () => {
 		report.flowId = flow?.id;
 
 		report.year = year;
-		report.eventId = event?.key;
-		report.matchId = match?.key;
-		report.teamId = team?.key;
+		report.eventId = event ? event?.key : null;
+		report.matchId = match ? match?.key : null;
+		report.teamId = team ? team?.key : null;
 
 		report.events = processEvents(report.events!);
 

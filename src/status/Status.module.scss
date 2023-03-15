@@ -15,7 +15,6 @@
 		gap: 0.5rem;
 
 		p {
-			text-align: center;
 			margin: 0;
 		}
 
@@ -25,4 +24,68 @@
 			height: fit-content;
 		}
 	}
+}
+
+.syncPopup {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 7;
+	background-color: rgba(0, 0, 0, 0);
+	backdrop-filter: blur(0px);
+	pointer-events: none;
+
+	transition-duration: 0.3s;
+	transition-property: filter, background-color;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+
+	> div {
+		margin-top: 5rem;
+		background-color: $white;
+		border-radius: 0.25rem;
+		border: 1px solid $black;
+		padding: 1rem;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 1.5rem;
+
+		> ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+
+			> li {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+
+				> input {
+					height: min-content;
+					padding: 0 0.25rem;
+					transform: none !important;
+				}
+			}
+		}
+
+		input {
+			@include input;
+		}
+	}
+}
+
+.syncPopup.active {
+	background-color: rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(1.5px);
+	pointer-events: auto;
 }

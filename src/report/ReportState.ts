@@ -10,7 +10,7 @@ export interface ReportState extends FlowState {
 
 	// setup
 	year: number;
-	eventId: string;
-	matchId: string;
-	teamId: string;
+	eventId: string | null;
+	matchId: string | null;
+	teamId: string | null;
 }
