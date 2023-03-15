@@ -38,6 +38,10 @@ const processEvents = (events: ViewEvent[]) => {
 			for (const key of payloadKeys) {
 				processedEvent.payload![key] = event.payload[key] || null;
 			}
+		} else {
+			for (const key of payloadKeys) {
+				processedEvent.payload![key] = null;
+			}
 		}
 
 		processedEvents.push(processedEvent);
