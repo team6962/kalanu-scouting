@@ -183,18 +183,13 @@ const evalView: ViewSchema = {
 	components: [
 		{
 			type: ComponentSchemaType.Toggle,
-			name: 'fouled',
-			id: 'fouled'
-		},
-		{
-			type: ComponentSchemaType.Toggle,
 			name: 'parked',
 			id: 'parked'
 		},
 		{
 			type: ComponentSchemaType.Toggle,
-			name: 'unwieldy',
-			id: 'unwieldy'
+			name: 'unstable',
+			id: 'unstable'
 		},
 		{
 			type: ComponentSchemaType.LongText,
@@ -203,7 +198,7 @@ const evalView: ViewSchema = {
 		}
 	],
 
-	layout: [['fouled', 'parked', 'unwieldy'], ['notes']],
+	layout: [['parked', 'unstable'], ['notes']],
 
 	options: {
 		showTimer: false,
@@ -213,7 +208,7 @@ const evalView: ViewSchema = {
 
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
-	version: '1.1.1',
+	version: '1.1.2',
 	flows: [
 		{
 			id: 'scoring',
