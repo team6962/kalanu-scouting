@@ -6,10 +6,17 @@
 	gap: 1rem;
 
 	> div {
-		display: grid;
-		grid-auto-columns: 1fr;
-		grid-auto-flow: column;
+		// display: grid;
+		// grid-auto-columns: 1fr;
+		// grid-auto-flow: column;
+		display: flex;
+		flex-wrap: wrap;
 		gap: 1rem;
+
+		> * {
+			flex-grow: 1;
+			flex-basis: 0%;
+		}
 	}
 
 	.timerAndUndo {
