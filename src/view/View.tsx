@@ -5,6 +5,7 @@ import {
 	Operator,
 	resolveOperator
 } from 'renegade-js';
+import { MatchSimple, TeamSimple } from '../api/types';
 import { Component } from '../component/Component';
 import { FlowState } from '../flow/Flow';
 import { Stopwatch } from './stopwatch/Stopwatch';
@@ -12,9 +13,12 @@ import { useStopwatch } from './stopwatch/useStopwatch';
 import { TimerPhase, ViewSchema } from './ViewSchema';
 
 import * as styles from './View.module.scss';
+import { matchToString } from '../setup/MatchCombo';
 
 interface ViewProps {
 	view: ViewSchema;
+	team: TeamSimple | null;
+	match: MatchSimple | null;
 
 	state: FlowState;
 	setState: (state: FlowState) => void;
@@ -39,7 +43,7 @@ const resolveTimerPhase = (time: number, view: ViewSchema): TimerPhase | null =>
 	return null;
 };
 
-export const View: React.FC<ViewProps> = ({ view, state, setState }) => {
+export const View: React.FC<ViewProps> = ({ view, state, setState, team, match }) => {
 	const time = useStopwatch(100, state.start);
 	const phase = resolveTimerPhase(time, view);
 
@@ -75,10 +79,22 @@ export const View: React.FC<ViewProps> = ({ view, state, setState }) => {
 		}
 	};
 
+	const showTeam =
+		view.options === undefined ||
+		view.options.showTeam === undefined ||
+		view.options.showTeam === true;
+
+	const showMatch = !(
+		view.options === undefined ||
+		view.options.showMatch === undefined ||
+		view.options.showMatch === false
+	);
+
 	const showTimer =
 		view.options === undefined ||
 		view.options.showTimer === undefined ||
 		view.options.showTimer === true;
+
 	const showUndo =
 		view.options === undefined ||
 		view.options.showUndo === undefined ||
@@ -86,6 +102,23 @@ export const View: React.FC<ViewProps> = ({ view, state, setState }) => {
 
 	return (
 		<div className={styles.view}>
+			{showTeam || showMatch ? (
+				<div className={styles.teamAndMatch}>
+					<i>currently scouting</i>
+					{showTeam ? (
+						<span>
+							team{' '}
+							{team
+								? `${team.team_number}: ${team.nickname || team.name}`
+								: 'not selected'}
+						</span>
+					) : null}
+					{showTeam && showMatch ? <i>in</i> : null}
+					{showMatch ? (
+						<span>match {match ? matchToString(match) : 'not selected'}</span>
+					) : null}
+				</div>
+			) : null}
 			{showTimer || showUndo ? (
 				<div className={styles.timerAndUndo}>
 					{showTimer ? (
@@ -108,7 +141,7 @@ export const View: React.FC<ViewProps> = ({ view, state, setState }) => {
 			) : null}
 
 			{layout.map((row, i) => (
-				<div key={i}>
+				<div key={i} className={styles.components}>
 					{row.map((key) =>
 						key ? (
 							<Component

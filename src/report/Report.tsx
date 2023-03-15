@@ -129,7 +129,13 @@ export const Report: React.FC = () => {
 					/>
 				) : null}
 				{state === 'active' ? (
-					<Flow flow={flow!} onSubmit={onFlowSubmit} onExit={onFlowExit} />
+					<Flow
+						flow={flow!}
+						onSubmit={onFlowSubmit}
+						onExit={onFlowExit}
+						team={team}
+						match={match}
+					/>
 				) : null}
 			</div>
 		</div>

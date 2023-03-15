@@ -48,6 +48,17 @@ export interface ViewSchemaOptions {
 	 * @default false
 	 */
 	undoAcrossPhases?: boolean;
+
+	/**
+	 * display the selected team above the active view (above timer)
+	 * @default true
+	 */
+	showTeam?: boolean;
+	/**
+	 * display the selected match above the active view, beside team
+	 * @default false
+	 */
+	showMatch?: boolean;
 }
 
 export interface ViewSchema {

@@ -18,6 +18,14 @@ interface MatchComboProps {
 	disabled?: boolean;
 }
 
+export const matchToString = (match: MatchSimple | null, suffix = true) => {
+	if (match === null) return '';
+
+	const level = matchLevels[match.comp_level];
+	const setSuffix = match.comp_level !== 'qm' ? ` Match ${match.set_number}` : '';
+	return `${level} ${match.match_number}${suffix ? setSuffix : ''}`;
+};
+
 export const MatchCombo: React.FC<MatchComboProps> = ({
 	event,
 	value,
@@ -30,15 +38,6 @@ export const MatchCombo: React.FC<MatchComboProps> = ({
 
 	// if event changes to one other than this match, unset it
 	if (value !== null && value.event_key !== event.key) onChange(null);
-
-	// prep handler
-	const matchToString = (match: MatchSimple | null, suffix = true) => {
-		if (match === null) return '';
-
-		const level = matchLevels[match.comp_level];
-		const setSuffix = match.comp_level !== 'qm' ? ` Match ${match.set_number}` : '';
-		return `${level} ${match.match_number}${suffix ? setSuffix : ''}`;
-	};
 
 	// if events aren't ready to display
 	return matches === undefined || matchesLoading || matchesError !== undefined ? (

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { MatchSimple, TeamSimple } from '../api/types';
 import { ComponentSchemaType } from '../component/ComponentSchema';
 import { View, ViewEvent } from '../view/View';
 import { ViewSchema } from '../view/ViewSchema';
@@ -8,6 +9,8 @@ import * as styles from './Flow.module.scss';
 
 interface FlowProps {
 	flow: FlowSchema;
+	team: TeamSimple | null;
+	match: MatchSimple | null;
 	initialState?: FlowState;
 	onSubmit?: (state: FlowState) => void;
 	onExit?: () => void;
@@ -31,7 +34,14 @@ const reduceViewToInitialData = (view: ViewSchema): FlowState['data'] => {
 	return data;
 };
 
-export const Flow: React.FC<FlowProps> = ({ flow, initialState, onSubmit, onExit }) => {
+export const Flow: React.FC<FlowProps> = ({
+	flow,
+	initialState,
+	onSubmit,
+	onExit,
+	team,
+	match
+}) => {
 	if (initialState === undefined) {
 		let data: FlowState['data'] = {};
 		if (flow.views instanceof Array) {
@@ -59,7 +69,7 @@ export const Flow: React.FC<FlowProps> = ({ flow, initialState, onSubmit, onExit
 
 	return (
 		<div className={styles.flow}>
-			<View state={state} setState={setState} view={current} />
+			<View state={state} setState={setState} view={current} team={team} match={match} />
 			<div className={styles.controls}>
 				{previous ? (
 					<input
