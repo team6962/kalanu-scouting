@@ -208,7 +208,7 @@ const evalView: ViewSchema = {
 
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
-	version: '1.1.2',
+	version: '1.1.3',
 	flows: [
 		{
 			id: 'scoring',
@@ -351,7 +351,7 @@ export const Model2023: ModelSchema = {
 					options: {
 						timerPhases: [
 							{
-								length: 15,
+								length: 18,
 								id: 'auton',
 								color: '#cb3d3b'
 							},
