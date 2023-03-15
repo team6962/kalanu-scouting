@@ -81,6 +81,7 @@ export const ComboBox = <T extends unknown>({
 					itemMatchesSearch(item.item, changes.inputValue || '')
 				);
 			setInputItems(tempItems);
+			if (changes.inputValue === '') onChange(null);
 			return changes;
 		} else if (type === stateChangeTypes.InputBlur) {
 			if (value !== null)
