@@ -10,8 +10,8 @@ Current features:
 
 Roadmap:
 
--   [ ] Feedback for piece dropping
--   [ ] Limit options while docked
+-   [x] Feedback for piece dropping
+-   [x] Limit options while docked
 -   [ ] Rewritten Swagger parsing
--   [ ] Future-proofed-ish frontend config
+-   [x] Future-proofed-ish frontend config
 -   [ ] Backend dashboard
