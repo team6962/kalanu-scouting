@@ -246,12 +246,17 @@ export const Model2023: ModelSchema = {
 							disabled: { $or: [currentlyDocked] }
 						},
 						{
-							type: ComponentSchemaType.Toggle,
-							id: 'autonpick',
-							name: 'can pick in auton',
-							disabled: {
-								$ne: ['$$phase', 'auton']
-							}
+							type: ComponentSchemaType.Event,
+							name: {
+								$cond: {
+									if: currentlyDocked,
+									then: 'docked',
+									else: 'dock'
+								}
+							},
+							id: 'docking',
+							eventId: 'dock',
+							disabled: currentlyDocked
 						},
 						{
 							type: ComponentSchemaType.Event,
