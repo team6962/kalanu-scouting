@@ -219,93 +219,54 @@ export const Model2023: ModelSchema = {
 					name: 'team scoring',
 
 					components: [
-						{
-							type: ComponentSchemaType.Event,
-							name: 'note picked up',
-							id: 'notePickup',
-							eventId: 'pickup',
-							eventPayload: { piece: 'cube' },
-							disabled: currentlyDocked,
-							color: {
-								$cond: {
-									if: {
-										$eq: [heldPiece, 'cube']
-									},
-									then: '#d19c80',
-									else: '#d8dada'
-								}
-							}
-						},
-					/*	{
-							type: ComponentSchemaType.Event,
-							name: 'cone',
-							id: 'conePickup',
-							eventId: 'pickup',
-							eventPayload: { piece: 'cone' },
-							disabled: currentlyDocked,
-							color: {
-								$cond: {
-									if: {
-										$eq: [heldPiece, 'cone']
-									},
-									then: '#c59849',
-									else: '#d8dada'
-								}
-							}
-						}, */
+					
+						
 						{
 							type: ComponentSchemaType.Event,
 							name: 'amp',
-							id: 'ampScore',
+							id: 'bottomScore',
 							eventId: 'score',
 							eventPayload: { level: 1, piece: heldPiece },
-							disabled: { $or: [noPieceHeld, currentlyDocked] }
+							disabled: { $or: [currentlyDocked] }
 						},
 						{
 							type: ComponentSchemaType.Event,
 							name: 'speaker',
-							id: 'speakerScore',
+							id: 'middleScore',
 							eventId: 'score',
 							eventPayload: { level: 2, piece: heldPiece },
-							disabled: { $or: [noPieceHeld, currentlyDocked] }
+							disabled: { $or: [currentlyDocked] }
 						},
 						{
 							type: ComponentSchemaType.Event,
 							name: 'trap',
-							id: 'trapScore',
+							id: 'topScore',
 							eventId: 'score',
 							eventPayload: { level: 3, piece: heldPiece },
-							disabled: {
-								$or: [
-									{
-										$not: [currentlyDocked]
-									},
-									currentlyEngaged
-								]
-							}						},
+							disabled: { $or: [currentlyDocked] }
+						},
 						{
 							type: ComponentSchemaType.Event,
 							name: {
 								$cond: {
 									if: currentlyDocked,
-									then: 'onstage (currently hanging)',
-									else: 'onstage'
+									then: 'docked',
+									else: 'dock'
 								}
 							},
-							id: 'onstage',
+							id: 'docking',
 							eventId: 'dock',
 							disabled: currentlyDocked
 						},
 						{
 							type: ComponentSchemaType.Event,
-					/*		name: {
+							name: {
 								$cond: {
 									if: currentlyEngaged,
 									then: 'engaged',
 									else: 'engage'
 								}
-							}, */
-							name: '',
+							},
 							id: 'engaging',
 							eventId: 'engage',
 							disabled: {
@@ -349,16 +310,15 @@ export const Model2023: ModelSchema = {
 					],
 
 					layout: [
-						['notePickup'],
-						['ampScore', 'speakerScore', 'trapScore'],
-						['leftCommunity', 'onstage', 'trapScore'],
-						['timesPickedUp', 'timesScored', 'timesFumbled']
+						['bottomScore', 'middleScore'],
+						['leftCommunity', 'docking', 'engaging', 'topScore'],
+						['timesPickedUp', 'timesScored']
 					],
 
 					options: {
 						timerPhases: [
 							{
-								length: 18,
+								length: 8,
 								id: 'auton',
 								color: '#cb3d3b'
 							},
