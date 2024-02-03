@@ -2,7 +2,7 @@ import { Operator } from 'renegade-js';
 import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
 import { ViewSchema } from './view/ViewSchema';
-
+/*hi*/
 const noPieceHeld: Operator = {
 	$let: {
 		// find index of most recent time we scored and picked up a piece
@@ -63,7 +63,7 @@ const noPieceHeld: Operator = {
 	}
 };
 
-const currentlyDocked: Operator = {
+const currentlyHanging: Operator = {
 	$ne: [
 		{
 			$indexOfArray: [
@@ -72,8 +72,8 @@ const currentlyDocked: Operator = {
 						input: '$events',
 						in: {
 							$and: [
-								{ $eq: ['$$this.id', 'dock'] },
-								{ $eq: ['$$this.phase', '$$phase'] }
+								{ $eq: ['$$this.id', 'hang'] },
+								{ $eq: ['$$this.phase', 'teleop'] }
 							]
 						}
 					}
@@ -129,26 +129,7 @@ const timesPickedUp: Operator = {
 	}
 };
 
-const timesFumbled: Operator = {
-	$let: {
-		vars: {
-			fumbled: { $subtract: [timesPickedUp, timesScored] }
-		},
-		in: {
-			$cond: {
-				if: { $eq: ['$$fumbled', 0] },
-				then: 0,
-				else: {
-					$cond: {
-						if: noPieceHeld,
-						then: '$$fumbled',
-						else: { $subtract: ['$$fumbled', 1] }
-					}
-				}
-			}
-		}
-	}
-};
+
 
 const heldPiece: Operator = {
 	$let: {
@@ -175,6 +156,7 @@ const heldPiece: Operator = {
 		}
 	}
 };
+
 
 const evalView: ViewSchema = {
 	id: 'eval_view',
@@ -227,7 +209,7 @@ export const Model2023: ModelSchema = {
 							id: 'bottomScore',
 							eventId: 'score',
 							eventPayload: { level: 1, piece: heldPiece },
-							disabled: { $or: [currentlyDocked] }
+							disabled: { $or: [currentlyHanging] }
 						},
 						{
 							type: ComponentSchemaType.Event,
@@ -235,49 +217,35 @@ export const Model2023: ModelSchema = {
 							id: 'middleScore',
 							eventId: 'score',
 							eventPayload: { level: 2, piece: heldPiece },
-							disabled: { $or: [currentlyDocked] }
+							disabled: { $or: [currentlyHanging] }
 						},
 						{
-							type: ComponentSchemaType.Event,
+							type: ComponentSchemaType.Toggle,
+							id: 'trap',
 							name: 'trap',
-							id: 'topScore',
-							eventId: 'score',
-							eventPayload: { level: 3, piece: heldPiece },
-							disabled: { $or: [currentlyDocked] }
-						},
-						{
-							type: ComponentSchemaType.Event,
-							name: {
-								$cond: {
-									if: currentlyDocked,
-									then: 'docked',
-									else: 'dock'
-								}
-							},
-							id: 'docking',
-							eventId: 'dock',
-							disabled: currentlyDocked
-						},
-						{
-							type: ComponentSchemaType.Event,
-							name: {
-								$cond: {
-									if: currentlyEngaged,
-									then: 'engaged',
-									else: 'engage'
-								}
-							},
-							id: 'engaging',
-							eventId: 'engage',
 							disabled: {
-								$or: [
-									{
-										$not: [currentlyDocked]
-									},
-									currentlyEngaged
-								]
+								$ne: ['$$phase', 'teleop']
 							}
 						},
+						{
+							type: ComponentSchemaType.Toggle,
+							id: 'autonscore',
+							name: 'can score in auton',
+							disabled: {
+								$ne: ['$$phase', 'auton']
+							}
+						},
+						
+						{
+							type: ComponentSchemaType.Toggle,
+							id: 'hang',
+							name: 'hang',
+							disabled: {
+								$ne: ['$$phase', 'teleop']
+							}
+						},
+						
+
 						{
 							type: ComponentSchemaType.Toggle,
 							id: 'leftCommunity',
@@ -286,13 +254,8 @@ export const Model2023: ModelSchema = {
 								$ne: ['$$phase', 'auton']
 							}
 						},
-						{
-							type: ComponentSchemaType.StaticText,
-							id: 'timesPickedUp',
-							value: {
-								$concat: ['pieces collected: ', timesPickedUp]
-							}
-						},
+						
+
 						{
 							type: ComponentSchemaType.StaticText,
 							id: 'timesScored',
@@ -300,19 +263,13 @@ export const Model2023: ModelSchema = {
 								$concat: ['pieces scored: ', timesScored]
 							}
 						},
-						{
-							type: ComponentSchemaType.StaticText,
-							id: 'timesFumbled',
-							value: {
-								$concat: ['pieces fumbled: ', timesFumbled]
-							}
-						}
+
 					],
 
 					layout: [
 						['bottomScore', 'middleScore'],
-						['leftCommunity', 'docking', 'engaging', 'topScore'],
-						['timesPickedUp', 'timesScored']
+						['leftCommunity', 'autonscore', 'hang', 'trap'],
+						['timesScored']
 					],
 
 					options: {
