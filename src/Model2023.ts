@@ -72,8 +72,8 @@ const currentlyHanging: Operator = {
 						input: '$events',
 						in: {
 							$and: [
-								{ $eq: ['$$this.id', 'hang'] },
-								{ $eq: ['$$this.phase', 'teleop'] }
+								{ $eq: ['$$this.id', 'hanged'] },
+								{ $eq: ['$$this.phase', '$$phase'] }
 							]
 						}
 					}
@@ -218,32 +218,34 @@ export const Model2023: ModelSchema = {
 							eventId: 'score',
 							eventPayload: { level: 2, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
+							
 						},
 						{
 							type: ComponentSchemaType.Toggle,
 							id: 'trap',
 							name: 'trap',
 							disabled: {
-								$ne: ['$$phase', 'teleop']
-							}
-						},
-						{
-							type: ComponentSchemaType.Toggle,
-							id: 'autonscore',
-							name: 'can score in auton',
-							disabled: {
-								$ne: ['$$phase', 'auton']
+								$not: [currentlyHanging]
 							}
 						},
 						
+						
 						{
-							type: ComponentSchemaType.Toggle,
-							id: 'hang',
-							name: 'hang',
-							disabled: {
-								$ne: ['$$phase', 'teleop']
-							}
+							type: ComponentSchemaType.Event,
+							name: {
+								$cond: {
+									if: currentlyHanging,
+									then: 'hanging',
+									else: 'hang'
+								}
+							},
+							id: 'onstage',
+							eventId: 'hanged',
+							disabled: currentlyHanging
 						},
+
+						
+				
 						
 
 						{
@@ -268,14 +270,14 @@ export const Model2023: ModelSchema = {
 
 					layout: [
 						['bottomScore', 'middleScore'],
-						['leftCommunity', 'autonscore', 'hang', 'trap'],
+						['leftCommunity', 'onstage', 'trap'],
 						['timesScored']
 					],
 
 					options: {
 						timerPhases: [
 							{
-								length: 8,
+								length: 15,
 								id: 'auton',
 								color: '#cb3d3b'
 							},
@@ -284,6 +286,7 @@ export const Model2023: ModelSchema = {
 								id: 'teleop',
 								color: '#4979db'
 							}
+						
 						]
 					}
 				},
