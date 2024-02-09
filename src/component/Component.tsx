@@ -3,9 +3,9 @@ import {
 	assertArray,
 	assertBoolean,
 	assertNumber,
-	assertObject,
+	// assertObject,
 	assertString,
-	JsonSerializable,
+	// JsonSerializable,
 	Operator,
 	resolveOperator
 } from 'renegade-js';
@@ -46,20 +46,20 @@ export const Component: React.FC<ComponentProps> = ({
 	switch (component.type) {
 		case ComponentSchemaType.Event:
 			const handleEvent = () => {
-				const includeTime =
-					component.includeTime === undefined ? true : component.includeTime;
+				// const includeTime =
+					// component.includeTime === undefined ? true : component.includeTime;
 
-				const payload = component.eventPayload ? resolve(component.eventPayload) : null;
-				if (payload !== null) assertObject(payload);
+				// const payload = component.eventPayload ? resolve(component.eventPayload) : null;
+				// if (payload !== null) assertObject(payload);
 
 				setState({
 					...state,
 					events: [
 						{
 							id: component.eventId || component.id,
-							time: includeTime ? (Date.now() - state.start) / 1000 : null,
+							// time: includeTime ? (Date.now() - state.start) / 1000 : null,
 							phase: phase ? phase.id : null,
-							payload: payload as Record<string, JsonSerializable>
+							// payload: payload as Record<string, JsonSerializable>
 						},
 						...state.events
 					]
