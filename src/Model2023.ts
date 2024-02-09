@@ -72,7 +72,7 @@ const currentlyHanging: Operator = {
 						input: '$events',
 						in: {
 							$and: [
-								{ $eq: ['$$this.id', 'hanged'] },
+								{ $eq: ['$$this.id', 'hung'] },
 								{ $eq: ['$$this.phase', '$$phase'] }
 							]
 						}
@@ -112,7 +112,7 @@ const timesScored: Operator = {
 		$filter: {
 			input: '$events',
 			cond: {
-				$eq: ['$$this.id', 'score']
+				$in: ['$$this.id', ['amp', 'speaker']]
 			}
 		}
 	}
@@ -206,7 +206,7 @@ export const Model2023: ModelSchema = {
 						{
 							type: ComponentSchemaType.Event,
 							name: 'amp',
-							id: 'bottomScore',
+							id: 'amp',
 							eventId: 'amp',
 							// eventPayload: { level: 1, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
@@ -214,7 +214,7 @@ export const Model2023: ModelSchema = {
 						{
 							type: ComponentSchemaType.Event,
 							name: 'speaker',
-							id: 'middleScore',
+							id: 'speaker',
 							eventId: 'speaker',
 							// eventPayload: { level: 2, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
@@ -237,8 +237,8 @@ export const Model2023: ModelSchema = {
 									else: 'hang'
 								}
 							},
-							id: 'onstage',
-							eventId: 'hanged',
+							id: 'hang',
+							eventId: 'hung',
 							disabled: currentlyHanging
 						},
 
@@ -267,8 +267,8 @@ export const Model2023: ModelSchema = {
 					],
 
 					layout: [
-						['bottomScore', 'middleScore'],
-						['leftCommunity', 'onstage', 'trap'],
+						['amp', 'speaker'],
+						['leftCommunity', 'hang', 'trap'],
 						['timesScored']
 					],
 
