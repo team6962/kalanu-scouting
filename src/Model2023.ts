@@ -3,65 +3,65 @@ import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
 import { ViewSchema } from './view/ViewSchema';
 /*hi*/
-const noPieceHeld: Operator = {
-	$let: {
-		// find index of most recent time we scored and picked up a piece
-		vars: {
-			lastPickup: {
-				$indexOfArray: [
-					{
-						$map: {
-							input: '$events',
-							in: {
-								$eq: ['$$this.id', 'pickup']
-							}
-						}
-					},
-					true
-				]
-			},
-			lastScore: {
-				$indexOfArray: [
-					{
-						$map: {
-							input: '$events',
-							in: {
-								$eq: ['$$this.id', 'score']
-							}
-						}
-					},
-					true
-				]
-			}
-		},
-		in: {
-			$cond: {
-				// if we never picked up a piece
-				if: {
-					$eq: ['$$lastPickup', -1]
-				},
-				// disable scoring
-				then: true,
-				// if we have picked up a piece
-				else: {
-					$cond: {
-						// and we haven't scored since then
-						if: {
-							$eq: ['$$lastScore', -1]
-						},
-						// enable scoring
-						then: false,
-						// otherwise, only disable scoring if we scored
-						// more recently than we picked up a piece
-						else: {
-							$lt: ['$$lastScore', '$$lastPickup']
-						}
-					}
-				}
-			}
-		}
-	}
-};
+// const noPieceHeld: Operator = {
+// 	$let: {
+// 		// find index of most recent time we scored and picked up a piece
+// 		vars: {
+// 			lastPickup: {
+// 				$indexOfArray: [
+// 					{
+// 						$map: {
+// 							input: '$events',
+// 							in: {
+// 								$eq: ['$$this.id', 'pickup']
+// 							}
+// 						}
+// 					},
+// 					true
+// 				]
+// 			},
+// 			lastScore: {
+// 				$indexOfArray: [
+// 					{
+// 						$map: {
+// 							input: '$events',
+// 							in: {
+// 								$eq: ['$$this.id', 'score']
+// 							}
+// 						}
+// 					},
+// 					true
+// 				]
+// 			}
+// 		},
+// 		in: {
+// 			$cond: {
+// 				// if we never picked up a piece
+// 				if: {
+// 					$eq: ['$$lastPickup', -1]
+// 				},
+// 				// disable scoring
+// 				then: true,
+// 				// if we have picked up a piece
+// 				else: {
+// 					$cond: {
+// 						// and we haven't scored since then
+// 						if: {
+// 							$eq: ['$$lastScore', -1]
+// 						},
+// 						// enable scoring
+// 						then: false,
+// 						// otherwise, only disable scoring if we scored
+// 						// more recently than we picked up a piece
+// 						else: {
+// 							$lt: ['$$lastScore', '$$lastPickup']
+// 						}
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// };
 
 const currentlyHanging: Operator = {
 	$ne: [
@@ -85,27 +85,27 @@ const currentlyHanging: Operator = {
 	]
 };
 
-const currentlyEngaged: Operator = {
-	$ne: [
-		{
-			$indexOfArray: [
-				{
-					$map: {
-						input: '$events',
-						in: {
-							$and: [
-								{ $eq: ['$$this.id', 'engage'] },
-								{ $eq: ['$$this.phase', '$$phase'] }
-							]
-						}
-					}
-				},
-				true
-			]
-		},
-		-1
-	]
-};
+// const currentlyEngaged: Operator = {
+// 	$ne: [
+// 		{
+// 			$indexOfArray: [
+// 				{
+// 					$map: {
+// 						input: '$events',
+// 						in: {
+// 							$and: [
+// 								{ $eq: ['$$this.id', 'engage'] },
+// 								{ $eq: ['$$this.phase', '$$phase'] }
+// 							]
+// 						}
+// 					}
+// 				},
+// 				true
+// 			]
+// 		},
+// 		-1
+// 	]
+// };
 
 const timesScored: Operator = {
 	$size: {
@@ -118,44 +118,44 @@ const timesScored: Operator = {
 	}
 };
 
-const timesPickedUp: Operator = {
-	$size: {
-		$filter: {
-			input: '$events',
-			cond: {
-				$eq: ['$$this.id', 'pickup']
-			}
-		}
-	}
-};
+// const timesPickedUp: Operator = {
+// 	$size: {
+// 		$filter: {
+// 			input: '$events',
+// 			cond: {
+// 				$eq: ['$$this.id', 'pickup']
+// 			}
+// 		}
+// 	}
+// };
 
 
 
-const heldPiece: Operator = {
-	$let: {
-		vars: {
-			event: {
-				$first: {
-					$filter: {
-						input: '$events',
-						cond: {
-							$eq: ['$$this.id', 'pickup']
-						}
-					}
-				}
-			}
-		},
-		in: {
-			$cond: {
-				if: {
-					$or: [noPieceHeld, { $eq: ['$$event', null] }]
-				},
-				then: null,
-				else: '$$event.payload.piece'
-			}
-		}
-	}
-};
+// const heldPiece: Operator = {
+// 	$let: {
+// 		vars: {
+// 			event: {
+// 				$first: {
+// 					$filter: {
+// 						input: '$events',
+// 						cond: {
+// 							$eq: ['$$this.id', 'pickup']
+// 						}
+// 					}
+// 				}
+// 			}
+// 		},
+// 		in: {
+// 			$cond: {
+// 				if: {
+// 					$or: [noPieceHeld, { $eq: ['$$event', null] }]
+// 				},
+// 				then: null,
+// 				else: '$$event.payload.piece'
+// 			}
+// 		}
+// 	}
+// };
 
 
 const evalView: ViewSchema = {
@@ -208,7 +208,7 @@ export const Model2023: ModelSchema = {
 							name: 'amp',
 							id: 'bottomScore',
 							eventId: 'score',
-							eventPayload: { level: 1, piece: heldPiece },
+							// eventPayload: { level: 1, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
 						},
 						{
@@ -216,7 +216,7 @@ export const Model2023: ModelSchema = {
 							name: 'speaker',
 							id: 'middleScore',
 							eventId: 'score',
-							eventPayload: { level: 2, piece: heldPiece },
+							// eventPayload: { level: 2, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
 							
 						},
