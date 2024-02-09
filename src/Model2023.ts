@@ -207,7 +207,7 @@ export const Model2023: ModelSchema = {
 							type: ComponentSchemaType.Event,
 							name: 'amp',
 							id: 'bottomScore',
-							eventId: 'score',
+							eventId: 'amp',
 							// eventPayload: { level: 1, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
 						},
@@ -215,20 +215,18 @@ export const Model2023: ModelSchema = {
 							type: ComponentSchemaType.Event,
 							name: 'speaker',
 							id: 'middleScore',
-							eventId: 'score',
+							eventId: 'speaker',
 							// eventPayload: { level: 2, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
 							
 						},
 						{
-							type: ComponentSchemaType.Toggle,
-							id: 'trap',
+							type: ComponentSchemaType.Event,
 							name: 'trap',
-							disabled: {
-								$not: [currentlyHanging]
-							}
+							id: 'trap',
+							eventId: 'trap',
+							disabled: { $not: [currentlyHanging] }
 						},
-						
 						
 						{
 							type: ComponentSchemaType.Event,
