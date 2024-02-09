@@ -1,7 +1,7 @@
 import structuredClone from '@ungap/structured-clone';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
-import { assertObject } from 'renegade-js';
+// import { assertObject } from 'renegade-js';
 import { version } from '../../package.json';
 import { EventSimple, MatchSimple, TeamSimple } from '../api/types';
 import { Flow, FlowState } from '../flow/Flow';
@@ -16,33 +16,33 @@ import { useLocalStorage } from './useLocalStorage';
 import * as styles from './Report.module.scss';
 
 const processEvents = (events: ViewEvent[]) => {
-	const payloadKeys = new Set<string>();
-	for (const event of events) {
-		if (event.payload !== null) {
-			assertObject(event.payload);
-			for (const key in event.payload) payloadKeys.add(key);
-		}
-	}
+	// const payloadKeys = new Set<string>();
+	// for (const event of events) {
+	// 	if (event.payload !== null) {
+	// 		assertObject(event.payload);
+	// 		for (const key in event.payload) payloadKeys.add(key);
+	// 	}
+	// }
 
 	const processedEvents: ViewEvent[] = [];
 	for (const event of events) {
 		const processedEvent: ViewEvent = {
 			id: event.id,
 			phase: event.phase,
-			time: event.time,
-			payload: {}
+			// time: event.time,
+			// payload: {}
 		};
 
-		if (event.payload !== null) {
-			assertObject(event.payload);
-			for (const key of payloadKeys) {
-				processedEvent.payload![key] = event.payload[key] || null;
-			}
-		} else {
-			for (const key of payloadKeys) {
-				processedEvent.payload![key] = null;
-			}
-		}
+		// if (event.payload !== null) {
+		// 	assertObject(event.payload);
+		// 	for (const key of payloadKeys) {
+		// 		processedEvent.payload![key] = event.payload[key] || null;
+		// 	}
+		// } else {
+		// 	for (const key of payloadKeys) {
+		// 		processedEvent.payload![key] = null;
+		// 	}
+		// }
 
 		processedEvents.push(processedEvent);
 	}
