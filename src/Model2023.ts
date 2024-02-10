@@ -239,7 +239,15 @@ export const Model2023: ModelSchema = {
 							},
 							id: 'hang',
 							eventId: 'hung',
-							disabled: currentlyHanging
+						//	disabled: currentlyHanging
+							disabled: {
+								$or: [
+									{
+										$ne: ['$$phase', 'teleop']
+									},
+									currentlyHanging
+								]
+							}
 						},
 
 						
