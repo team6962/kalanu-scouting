@@ -112,7 +112,7 @@ const timesScored: Operator = {
 		$filter: {
 			input: '$events',
 			cond: {
-				$in: ['$$this.id', ['amp', 'speaker']]
+				$in: ['$$this.id', ['amp', 'speaker', 'trap']]
 			}
 		}
 	}
