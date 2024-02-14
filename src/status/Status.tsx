@@ -44,7 +44,7 @@ export const Status: React.FC<SyncMonitorProps> = ({ reports, setReports }) => {
 		<>
 			<div className={styles.sync}>
 				<div>
-					<p>{`kalanu v${version}, model v${Model2023.version}.`}</p>
+					<p>{`kalanu ${new Date().getFullYear()}.`}</p>
 					<p>{online ? 'online.' : 'offline.'}</p>
 					<p>
 						{reports.length > 0
