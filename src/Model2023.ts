@@ -256,8 +256,8 @@ export const Model2023: ModelSchema = {
 
 						{
 							type: ComponentSchemaType.Toggle,
-							id: 'leftCommunity',
-							name: 'left community',
+							id: 'leaf',
+							name: 'leaf',
 							disabled: {
 								$ne: ['$$phase', 'auton']
 							}
@@ -276,7 +276,7 @@ export const Model2023: ModelSchema = {
 
 					layout: [
 						['amp', 'speaker'],
-						['leftCommunity', 'hang', 'trap'],
+						['leaf', 'hang', 'trap'],
 						['timesScored']
 					],
 
