@@ -314,76 +314,32 @@ export const Model2023: ModelSchema = {
 
 				components: [
 					{
-						type: ComponentSchemaType.Toggle,
-						id: 'functional',
-						name: 'functional?',
-						default: true
-					},
-					{
-						type: ComponentSchemaType.Number,
-						id: 'weight',
-						name: 'weight (lbs)'
-					},
-					{
-						type: ComponentSchemaType.Number,
-						id: 'height',
-						name: 'height (in)'
-					},
-					{
-						type: ComponentSchemaType.Number,
-						id: 'speed',
-						name: 'top speed (mph)'
-					},
-					{
-						type: ComponentSchemaType.ComboBox,
-						id: 'drivetrain',
-						choices: ['tank drive', 'swerve drive', 'mecanum drive']
-					},
-					{
-						type: ComponentSchemaType.ComboBox,
-						id: 'highestGrid',
-						name: 'highest grid level',
-						choices: ['top', 'middle', 'bottom']
-					},
-					{
 						type: ComponentSchemaType.LongText,
 						id: 'jank',
 						name: 'jankiest part?'
 					},
 					{
-						type: ComponentSchemaType.StaticText,
-						id: 'chargingLabel',
-						value: 'charging slot:'
-					},
-					{
-						type: ComponentSchemaType.Toggle,
-						id: 'charging1',
-						name: '1st'
-					},
-					{
-						type: ComponentSchemaType.Toggle,
-						id: 'charging2',
-						name: '2nd'
-					},
-					{
-						type: ComponentSchemaType.Toggle,
-						id: 'charging3',
-						name: '3rd'
+						type: ComponentSchemaType.LongText,
+						id: 'PreferredAuto',
+						name: 'preferred auto setup:'
 					},
 					{
 						type: ComponentSchemaType.LongText,
-						id: 'chargingNotes',
-						name: 'charging notes?'
+						id: 'PreferredPickup',
+						name: 'preferred pickup position:'
+					},
+					{
+						type: ComponentSchemaType.LongText,
+						id: 'Notes',
+						name: 'notes?'
 					}
 				],
 
 				layout: [
-					['functional', 'weight'],
-					['height', 'speed'],
-					['drivetrain', 'highestGrid'],
 					['jank'],
-					['chargingLabel', 'charging1', 'charging2', 'charging3'],
-					['chargingNotes']
+					['PreferredAuto'],
+					['PreferredPickup'],
+					['Notes']
 				],
 
 				options: {
