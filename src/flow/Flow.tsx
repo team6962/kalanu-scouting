@@ -4,7 +4,7 @@ import { ComponentSchemaType } from '../component/ComponentSchema';
 import { View, ViewEvent } from '../view/View';
 import { ViewSchema } from '../view/ViewSchema';
 import { FlowSchema } from './FlowSchema';
-
+import useScreenSize from './useScreenSize';
 import * as styles from './Flow.module.scss';
 
 interface FlowProps {
@@ -67,6 +67,8 @@ export const Flow: React.FC<FlowProps> = ({
 		if (view < flow.views.length - 1) next = flow.views[view + 1];
 	}
 
+	const screenSize = useScreenSize();
+
 	return (
 		<div className={styles.flow}>
 			<View state={state} setState={setState} view={current} team={team} match={match} />
@@ -80,14 +82,14 @@ export const Flow: React.FC<FlowProps> = ({
 				) : (
 					<input
 						type="button"
-						value={`cancel report`}
+						value={ screenSize.width > 640 ? `cancel report` : `cancel` }
 						onClick={() => onExit && onExit()}
 					/>
 				)}
 				{next ? (
 					<input
 						type="button"
-						value={`continue to ${next.name || next.id}`}
+						value={ screenSize.width > 640 ? `continue to ${next.name || next.id}` : `continue` }
 						onClick={() => setView(view + 1)}
 					/>
 				) : (
