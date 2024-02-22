@@ -1,67 +1,9 @@
+// fun fact this is actually Model2024 xD xD
+
 import { Operator } from 'renegade-js';
 import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
 import { ViewSchema } from './view/ViewSchema';
-/*hi*/
-// const noPieceHeld: Operator = {
-// 	$let: {
-// 		// find index of most recent time we scored and picked up a piece
-// 		vars: {
-// 			lastPickup: {
-// 				$indexOfArray: [
-// 					{
-// 						$map: {
-// 							input: '$events',
-// 							in: {
-// 								$eq: ['$$this.id', 'pickup']
-// 							}
-// 						}
-// 					},
-// 					true
-// 				]
-// 			},
-// 			lastScore: {
-// 				$indexOfArray: [
-// 					{
-// 						$map: {
-// 							input: '$events',
-// 							in: {
-// 								$eq: ['$$this.id', 'score']
-// 							}
-// 						}
-// 					},
-// 					true
-// 				]
-// 			}
-// 		},
-// 		in: {
-// 			$cond: {
-// 				// if we never picked up a piece
-// 				if: {
-// 					$eq: ['$$lastPickup', -1]
-// 				},
-// 				// disable scoring
-// 				then: true,
-// 				// if we have picked up a piece
-// 				else: {
-// 					$cond: {
-// 						// and we haven't scored since then
-// 						if: {
-// 							$eq: ['$$lastScore', -1]
-// 						},
-// 						// enable scoring
-// 						then: false,
-// 						// otherwise, only disable scoring if we scored
-// 						// more recently than we picked up a piece
-// 						else: {
-// 							$lt: ['$$lastScore', '$$lastPickup']
-// 						}
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// };
 
 const currentlyHanging: Operator = {
 	$ne: [
@@ -85,28 +27,6 @@ const currentlyHanging: Operator = {
 	]
 };
 
-// const currentlyEngaged: Operator = {
-// 	$ne: [
-// 		{
-// 			$indexOfArray: [
-// 				{
-// 					$map: {
-// 						input: '$events',
-// 						in: {
-// 							$and: [
-// 								{ $eq: ['$$this.id', 'engage'] },
-// 								{ $eq: ['$$this.phase', '$$phase'] }
-// 							]
-// 						}
-// 					}
-// 				},
-// 				true
-// 			]
-// 		},
-// 		-1
-// 	]
-// };
-
 const timesScored: Operator = {
 	$size: {
 		$filter: {
@@ -118,50 +38,10 @@ const timesScored: Operator = {
 	}
 };
 
-// const timesPickedUp: Operator = {
-// 	$size: {
-// 		$filter: {
-// 			input: '$events',
-// 			cond: {
-// 				$eq: ['$$this.id', 'pickup']
-// 			}
-// 		}
-// 	}
-// };
-
-
-
-// const heldPiece: Operator = {
-// 	$let: {
-// 		vars: {
-// 			event: {
-// 				$first: {
-// 					$filter: {
-// 						input: '$events',
-// 						cond: {
-// 							$eq: ['$$this.id', 'pickup']
-// 						}
-// 					}
-// 				}
-// 			}
-// 		},
-// 		in: {
-// 			$cond: {
-// 				if: {
-// 					$or: [noPieceHeld, { $eq: ['$$event', null] }]
-// 				},
-// 				then: null,
-// 				else: '$$event.payload.piece'
-// 			}
-// 		}
-// 	}
-// };
-
 
 const evalView: ViewSchema = {
 	id: 'eval_view',
 	name: 'team evaluation',
-
 	components: [
 		{
 			type: ComponentSchemaType.Toggle,
@@ -181,7 +61,6 @@ const evalView: ViewSchema = {
 	],
 
 	layout: [['parked', 'unstable'], ['notes']],
-
 	options: {
 		showTimer: false,
 		showUndo: false
@@ -190,7 +69,7 @@ const evalView: ViewSchema = {
 
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
-	version: '1.1.3',
+	version: '2.0.0',
 	flows: [
 		{
 			id: 'scoring',
@@ -201,14 +80,11 @@ export const Model2023: ModelSchema = {
 					name: 'team scoring',
 
 					components: [
-					
-						
 						{
 							type: ComponentSchemaType.Event,
 							name: 'amp',
 							id: 'amp',
 							eventId: 'amp',
-							// eventPayload: { level: 1, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
 						},
 						{
@@ -216,7 +92,6 @@ export const Model2023: ModelSchema = {
 							name: 'speaker',
 							id: 'speaker',
 							eventId: 'speaker',
-							// eventPayload: { level: 2, piece: heldPiece },
 							disabled: { $or: [currentlyHanging] }
 							
 						},
@@ -227,7 +102,6 @@ export const Model2023: ModelSchema = {
 							eventId: 'trap',
 							disabled: { $not: [currentlyHanging] }
 						},
-						
 						{
 							type: ComponentSchemaType.Event,
 							name: {
@@ -239,7 +113,6 @@ export const Model2023: ModelSchema = {
 							},
 							id: 'hang',
 							eventId: 'hung',
-						//	disabled: currentlyHanging
 							disabled: {
 								$or: [
 									{
@@ -249,11 +122,6 @@ export const Model2023: ModelSchema = {
 								]
 							}
 						},
-
-						
-				
-						
-
 						{
 							type: ComponentSchemaType.Toggle,
 							id: 'leaf',
@@ -262,7 +130,6 @@ export const Model2023: ModelSchema = {
 								$ne: ['$$phase', 'auton']
 							}
 						},
-						
 
 						{
 							type: ComponentSchemaType.StaticText,
@@ -271,15 +138,12 @@ export const Model2023: ModelSchema = {
 								$concat: ['pieces scored: ', timesScored]
 							}
 						},
-
 					],
-
 					layout: [
 						['amp', 'speaker'],
 						['leaf', 'hang', 'trap'],
 						['timesScored']
 					],
-
 					options: {
 						timerPhases: [
 							{
@@ -307,11 +171,9 @@ export const Model2023: ModelSchema = {
 		{
 			id: 'pit',
 			name: 'pit scouting',
-
 			views: {
 				id: 'pit_view',
 				name: 'pit scouting',
-
 				components: [
 					{
 						type: ComponentSchemaType.LongText,
@@ -334,20 +196,17 @@ export const Model2023: ModelSchema = {
 						name: 'notes?'
 					}
 				],
-
 				layout: [
 					['jank'],
 					['PreferredAuto'],
 					['PreferredPickup'],
 					['Notes']
 				],
-
 				options: {
 					showTimer: false,
 					showUndo: false
 				}
 			},
-
 			options: {
 				requiresMatch: false
 			}
