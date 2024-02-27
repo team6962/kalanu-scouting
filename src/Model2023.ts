@@ -5,6 +5,7 @@ import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
 import { ViewSchema } from './view/ViewSchema';
 
+//var ampauton = null;
 const currentlyHanging: Operator = {
 	$ne: [
 		{
@@ -26,6 +27,55 @@ const currentlyHanging: Operator = {
 		-1
 	]
 };
+/*const countScores: Operator = {
+	$sum: {
+		input: '$events',
+		in: {
+			$and: [
+				{ $eq: ['$$this.id', 'amp'] },
+				{ $eq: ['$$this.phase', '$auton'] }
+				
+			]
+		}
+		
+		
+	}
+	
+}*/
+/*const countScores: Operator = {
+	$addFields: {
+	  scoreCount: {
+		$sum: {
+		  $map: {
+			input: '$events',
+			as: 'event',
+			in: {
+			  $cond: [
+				{
+				  $and: [
+					{ $eq: ['$$event.id', 'amp'] },
+					{ $eq: ['$$event.phase', '$auton'] }
+				  ]
+				},
+				1,  // If conditions are met, add 1 to the count
+				0   // Otherwise, add 0
+			  ]
+			}
+		  }
+		}
+	  }
+	}
+  };*/
+/*const countScored: Operator = {
+	$size: {
+		$filter: {
+			input: '$events',
+			cond: {
+				$in: {
+					$and: [
+						{ $eq: ['$$this.id', 'amp'] },
+						{ $eq: ['$$this.phase', '$auton'] }
+					]
 
 const timesScored: Operator = {
 	$size: {
