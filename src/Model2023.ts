@@ -5,6 +5,7 @@ import { ComponentSchemaType } from './component/ComponentSchema';
 import { ModelSchema } from './model/ModelSchema';
 import { ViewSchema } from './view/ViewSchema';
 
+//var ampauton = null;
 const currentlyHanging: Operator = {
 	$ne: [
 		{
@@ -26,7 +27,133 @@ const currentlyHanging: Operator = {
 		-1
 	]
 };
+/*const countScores: Operator = {
+	$sum: {
+		input: '$events',
+		in: {
+			$and: [
+				{ $eq: ['$$this.id', 'amp'] },
+				{ $eq: ['$$this.phase', '$auton'] }
+				
+			]
+		}
+		
+		
+	}
+	
+}*/
+/*const countScores: Operator = {
+	$addFields: {
+	  scoreCount: {
+		$sum: {
+		  $map: {
+			input: '$events',
+			as: 'event',
+			in: {
+			  $cond: [
+				{
+				  $and: [
+					{ $eq: ['$$event.id', 'amp'] },
+					{ $eq: ['$$event.phase', '$auton'] }
+				  ]
+				},
+				1,  // If conditions are met, add 1 to the count
+				0   // Otherwise, add 0
+			  ]
+			}
+		  }
+		}
+	  }
+	}
+  };*/
+/*const countScored: Operator = {
+	$size: {
+		$filter: {
+			input: '$events',
+			cond: {
+				$in: {
+					$and: [
+						{ $eq: ['$$this.id', 'amp'] },
+						{ $eq: ['$$this.phase', '$auton'] }
+					]
 
+				}
+			}
+		}
+	}
+};*/
+const AmpAuton: Operator = {
+	$size: {
+	  $filter: {
+		input: '$events',
+		cond: {
+		  $and: [
+			{ $eq: ['$$this.id', 'amp'] },              // Check if 'id' is 'amp'
+			{ $eq: ['$$this.phase', 'auton'] }          // Check if 'phase' is 'auton'
+		  ]
+		}
+	  }
+	}
+  };
+  const SpeakerAuton: Operator = {
+	$size: {
+	  $filter: {
+		input: '$events',
+		cond: {
+		  $and: [
+			{ $eq: ['$$this.id', 'speaker'] },              // Check if 'id' is 'amp'
+			{ $eq: ['$$this.phase', 'auton'] }          // Check if 'phase' is 'auton'
+		  ]
+		}
+	  }
+	}
+  };
+  const AmpTeleop: Operator = {
+	$size: {
+	  $filter: {
+		input: '$events',
+		cond: {
+		  $and: [
+			{ $eq: ['$$this.id', 'amp'] },              // Check if 'id' is 'amp'
+			{ $eq: ['$$this.phase', 'teleop'] }          // Check if 'phase' is 'auton'
+		  ]
+		}
+	  }
+	}
+  };
+  const SpeakerTeleop: Operator = {
+	$size: {
+	  $filter: {
+		input: '$events',
+		cond: {
+		  $and: [
+			{ $eq: ['$$this.id', 'speaker'] },              // Check if 'id' is 'amp'
+			{ $eq: ['$$this.phase', 'teleop'] }          // Check if 'phase' is 'auton'
+		  ]
+		}
+	  }
+	}
+  };
+  const Trap: Operator = {
+	$size: {
+		$filter: {
+			input: '$events',
+			cond: {
+				$in: ['$$this.id', ['trap']]
+			}
+		}
+	}
+};
+const Hang: Operator = {
+	$size: {
+		$filter: {
+			input: '$events',
+			cond: {
+				$in: ['$$this.id', ['hung']]
+			}
+		}
+	}
+};
 const timesScored: Operator = {
 	$size: {
 		$filter: {
@@ -138,6 +265,48 @@ export const Model2023: ModelSchema = {
 								$concat: ['pieces scored: ', timesScored]
 							}
 						},
+					/*	{
+							type: ComponentSchemaType.StaticText,
+							id: 'AmpAuton',
+							value: {
+								$concat: ['ampauton scored: ', AmpAuton]
+							}
+						},
+						{
+							type: ComponentSchemaType.StaticText,
+							id: 'SpeakerAuton',
+							value: {
+								$concat: ['speakerauton scored: ', SpeakerAuton]
+							}
+						},
+						{
+							type: ComponentSchemaType.StaticText,
+							id: 'AmpTeleop',
+							value: {
+								$concat: ['ampteleop scored: ', AmpTeleop]
+							}
+						},
+						{
+							type: ComponentSchemaType.StaticText,
+							id: 'SpeakerTeleop',
+							value: {
+								$concat: ['speakerteleop scored: ', SpeakerTeleop]
+							}
+						},
+						{
+							type: ComponentSchemaType.StaticText,
+							id: 'Trap',
+							value: {
+								$concat: ['trap scored: ', Trap]
+							}
+						},
+						{
+							type: ComponentSchemaType.StaticText,
+							id: 'Hang',
+							value: {
+								$concat: ['Hang scored: ', Hang]
+							}
+						}*/
 					],
 					layout: [
 						['amp', 'speaker'],
