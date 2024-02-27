@@ -196,7 +196,7 @@ const evalView: ViewSchema = {
 
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
-	version: '2.0.0',
+	version: '2.1.1',
 	flows: [
 		{
 			id: 'scoring',
