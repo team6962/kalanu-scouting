@@ -13,4 +13,12 @@ export interface ReportState extends FlowState {
 	eventId: string | null;
 	matchId: string | null;
 	teamId: string | null;
+
+	// event type counts
+	ampAuton: number;
+	speakerAuton: number;
+	ampTeleop: number;
+	speakerTeleop: number;
+	trap: number;
+	hung: boolean;
 }
