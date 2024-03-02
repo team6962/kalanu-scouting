@@ -25,14 +25,6 @@ const processEvents = (events: ViewEvent[]) => {
 	// }
 
 	const processedEvents: ViewEvent[] = [];
-
-	let ampAuton = 0;
-	let speakerAuton = 0;
-	let ampTeleop = 0;
-	let speakerTeleop = 0;
-	let trap = 0;
-	let hung = false;
-
 	for (const event of events) {
 		const processedEvent: ViewEvent = {
 			id: event.id,
@@ -40,19 +32,6 @@ const processEvents = (events: ViewEvent[]) => {
 			// time: event.time,
 			// payload: {}
 		};
-
-		if (event.id === "amp" && event.phase === "auton")
-			ampAuton++;
-		else if (event.id === "speaker" && event.phase === "auton")
-			speakerAuton++;
-		else if (event.id === "amp" && event.phase === "teleop")
-			ampTeleop++;
-		else if (event.id === "speaker" && event.phase === "teleop")
-			speakerTeleop++;
-		else if (event.id === "trap")
-			trap++;
-		else if (event.id === "hung")
-			hung = true;
 
 		// if (event.payload !== null) {
 		// 	assertObject(event.payload);
@@ -70,7 +49,34 @@ const processEvents = (events: ViewEvent[]) => {
 
 	processedEvents.reverse();
 
-	return [{ 'ampAuton': ampAuton, 'speakerAuton': speakerAuton, 'ampTeleop': ampTeleop, 'speakerTeleop': speakerTeleop, 'trap': trap, 'hung': hung }, processedEvents];
+	return processedEvents;
+};
+
+const processCounts = (events: ViewEvent[]) => {
+	let ampAuton = 0;
+	let speakerAuton = 0;
+	let ampTeleop = 0;
+	let speakerTeleop = 0;
+	let trap = 0;
+	let hung = false;
+
+	for (const event of events) {
+		if (event.id === "amp" && event.phase === "auton")
+			ampAuton++;
+		else if (event.id === "speaker" && event.phase === "auton")
+			speakerAuton++;
+		else if (event.id === "amp" && event.phase === "teleop")
+			ampTeleop++;
+		else if (event.id === "speaker" && event.phase === "teleop")
+			speakerTeleop++;
+		else if (event.id === "trap")
+			trap++;
+		else if (event.id === "hung")
+			hung = true;
+
+	}
+
+	return { 'ampAuton': ampAuton, 'speakerAuton': speakerAuton, 'ampTeleop': ampTeleop, 'speakerTeleop': speakerTeleop, 'trap': trap, 'hung': hung };
 };
 
 export const Report: React.FC = () => {
@@ -126,14 +132,13 @@ export const Report: React.FC = () => {
 		report.matchId = match ? match?.key : null;
 		report.teamId = team ? team?.key : null;
 
-		// if the following set of lines have any errors, you should probably Just Ignore It
-		report.events = processEvents(report.events!)[1];
-		report.ampAuton = processEvents(report.events!)[0]['ampAuton']
-		report.speakerAuton = processEvents(report.events!)[0]['speakerAuton']
-		report.ampTeleop = processEvents(report.events!)[0]['ampTeleop']
-		report.speakerTeleop = processEvents(report.events!)[0]['speakerTeleop']
-		report.trap = processEvents(report.events!)[0]['trap']
-		report.hung = processEvents(report.events!)[0]['hung']
+		report.events = processEvents(report.events!);
+		report.ampAuton = processCounts(report.events!)['ampAuton']
+		report.speakerAuton = processCounts(report.events!)['speakerAuton']
+		report.ampTeleop = processCounts(report.events!)['ampTeleop']
+		report.speakerTeleop = processCounts(report.events!)['speakerTeleop']
+		report.trap = processCounts(report.events!)['trap']
+		report.hung = processCounts(report.events!)['hung']
 
 		setReports([...reports, report as ReportState]);
 	};
