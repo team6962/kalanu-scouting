@@ -12,6 +12,7 @@ import { Status } from '../status/Status';
 import { ViewEvent } from '../view/View';
 import { ReportState } from './ReportState';
 import { useLocalStorage } from './useLocalStorage';
+import Confetti from "react-confetti";
 
 import * as styles from './Report.module.scss';
 
@@ -108,6 +109,7 @@ export const Report: React.FC = () => {
 	if (localStorage.getItem('reports') === '{}') localStorage.setItem('reports', '[]');
 
 	const [reports, setReports] = useLocalStorage<ReportState[]>('reports', []);
+	const [confetti, setConfetti] = useState(false)
 
 	const onFlowStart = (flow: FlowSchema) => {
 		setFlow(flow);
@@ -120,6 +122,7 @@ export const Report: React.FC = () => {
 	const onFlowSubmit = (state: FlowState) => {
 		const report: Partial<ReportState> & FlowState = structuredClone(state);
 		setState('setup');
+		setConfetti(true);
 
 		report.id = nanoid();
 		report.appVersion = version;
@@ -149,6 +152,14 @@ export const Report: React.FC = () => {
 
 	return (
 		<div className={styles.report}>
+			{confetti ? <Confetti
+				width={window.innerWidth}
+				height={window.innerHeight}
+				gravity={0.25}
+				recycle={false}
+				style={{ background: "none" }}
+				onConfettiComplete={() => setConfetti(false)}
+			/> : null}
 			<div>
 				<Status reports={reports} setReports={setReports} />
 				{state === 'setup' ? (

@@ -7,6 +7,7 @@ Current features:
 -   Web-based, mobile ready
 -   Support for offline scouting
 -   TBA API integration
+-   Confetti
 
 Roadmap:
 
