@@ -53,9 +53,9 @@ export const TeamCombo: React.FC<TeamComboProps> = ({
 				const string = teamToString(team);
 				if (match === null || match.alliances === undefined) return string;
 				if (match.alliances.red?.team_keys.includes(team.key))
-					return <span className={styles.red}>Red {match.alliances.red?.team_keys.indexOf(team.key) + 1} - {string}</span>;
+					return <span className={styles.red}>Red {match.alliances.red?.team_keys.sort().indexOf(team.key) + 1} - {string}</span>;
 				if (match.alliances.blue?.team_keys.includes(team.key))
-					return <span className={styles.blue}>Blue {match.alliances.blue?.team_keys.indexOf(team.key) + 1} - {string}</span>;
+					return <span className={styles.blue}>Blue {match.alliances.blue?.team_keys.sort().indexOf(team.key) + 1} - {string}</span>;
 				return string;
 			}}
 			itemToKey={(team) => team.key}
