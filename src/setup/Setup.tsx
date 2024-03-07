@@ -105,8 +105,8 @@ export const Setup: React.FC<SetupProps> = ({
                 type="button"
                 value="Clear"
                 onClick={() => {
-                    match=null;
-                    team=null;
+                    setMatch?.(null);
+        			setTeam?.(null);
                 }}
             />
 			</div>
