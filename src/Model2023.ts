@@ -50,6 +50,11 @@ const evalView: ViewSchema = {
 		},
 		{
 			type: ComponentSchemaType.Toggle,
+			name: 'pass',
+			id: 'pass'
+		},
+		{
+			type: ComponentSchemaType.Toggle,
 			name: 'unstable',
 			id: 'unstable'
 		},
@@ -60,7 +65,7 @@ const evalView: ViewSchema = {
 		}
 	],
 
-	layout: [['parked', 'unstable'], ['notes']],
+	layout: [['parked', 'unstable', 'pass'], ['notes']],
 	options: {
 		showTimer: false,
 		showUndo: false
