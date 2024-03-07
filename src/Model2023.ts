@@ -50,7 +50,7 @@ const evalView: ViewSchema = {
 		},
 		{
 			type: ComponentSchemaType.Toggle,
-			name: 'pass',
+			name: 'consistently passing',
 			id: 'pass'
 		},
 		{
