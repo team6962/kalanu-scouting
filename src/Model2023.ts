@@ -157,7 +157,7 @@ export const Model2023: ModelSchema = {
 								color: '#cb3d3b'
 							},
 							{
-								length: 135,
+								length: 140,
 								id: 'teleop',
 								color: '#4979db'
 							}
