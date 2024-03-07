@@ -50,6 +50,11 @@ const evalView: ViewSchema = {
 		},
 		{
 			type: ComponentSchemaType.Toggle,
+			name: 'consistently passing',
+			id: 'pass'
+		},
+		{
+			type: ComponentSchemaType.Toggle,
 			name: 'unstable',
 			id: 'unstable'
 		},
@@ -60,7 +65,7 @@ const evalView: ViewSchema = {
 		}
 	],
 
-	layout: [['parked', 'unstable'], ['notes']],
+	layout: [['parked', 'unstable', 'pass'], ['notes']],
 	options: {
 		showTimer: false,
 		showUndo: false
@@ -69,7 +74,8 @@ const evalView: ViewSchema = {
 
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
-	version: '2.2.4',
+	version: '2.2.5',
+
 	flows: [
 		{
 			id: 'scoring',
@@ -152,7 +158,7 @@ export const Model2023: ModelSchema = {
 								color: '#cb3d3b'
 							},
 							{
-								length: 135,
+								length: 140,
 								id: 'teleop',
 								color: '#4979db'
 							}

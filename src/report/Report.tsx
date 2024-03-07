@@ -88,14 +88,14 @@ export const Report: React.FC = () => {
 	const [initialEvent, setInitialEvent] = useLocalStorage<EventSimple>('initialEvent', {
 		city: 'San Francisco',
 		country: 'USA',
-		end_date: '2022-03-20',
+		end_date: '2024-03-20',
 		event_code: 'casf',
 		event_type: 0,
-		key: '2022casf',
+		key: '2024casf',
 		name: 'San Francisco Regional',
-		start_date: '2022-03-17',
+		start_date: '2024-03-17',
 		state_prov: 'CA',
-		year: 2022
+		year: 2024
 	});
 	const [initialYear, setInitialYear] = useLocalStorage('initialYear', initialEvent.year);
 
