@@ -155,7 +155,7 @@ export const Report: React.FC = () => {
 			{confetti ? <Confetti
 				width={window.innerWidth}
 				height={window.innerHeight}
-				gravity={0.25}
+				gravity={2}
 				recycle={false}
 				style={{ background: "none" }}
 				onConfettiComplete={() => setConfetti(false)}

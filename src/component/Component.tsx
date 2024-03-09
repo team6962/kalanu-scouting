@@ -47,7 +47,7 @@ export const Component: React.FC<ComponentProps> = ({
 		case ComponentSchemaType.Event:
 			const handleEvent = () => {
 				// const includeTime =
-					// component.includeTime === undefined ? true : component.includeTime;
+				// component.includeTime === undefined ? true : component.includeTime;
 
 				// const payload = component.eventPayload ? resolve(component.eventPayload) : null;
 				// if (payload !== null) assertObject(payload);
@@ -225,6 +225,15 @@ export const Component: React.FC<ComponentProps> = ({
 					onChange={handleComboBox}
 					itemToString={itemToString}
 					placeholder={name}
+				/>
+			);
+
+		case ComponentSchemaType.Button:
+			return (
+				<input
+					type="button"
+					value={name}
+					onClick={() => window.open("https://docs.google.com/forms/d/1667xocIMQr7uW-cmo-sUnYc0_A0p3I5y4s4pEyogSrU/edit")}
 				/>
 			);
 	}

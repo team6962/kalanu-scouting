@@ -28,7 +28,11 @@ export enum ComponentSchemaType {
 	/**
 	 * represents a multiple-choice combobox. displayed as the ones in report setup.
 	 */
-	ComboBox = 'combobox'
+	ComboBox = 'combobox',
+	/**
+	 * represents a multiple-choice combobox. displayed as the ones in report setup.
+	 */
+	Button = 'button'
 }
 
 export type ComponentSchema = {
@@ -127,4 +131,12 @@ export type ComponentSchema = {
 			 */
 			default?: string;
 	  }
+	  | {
+		type: ComponentSchemaType.Button;
+		/**
+		 * the default value of the button
+		 * @default ''
+		 */
+		default?: string;
+  }
 );
