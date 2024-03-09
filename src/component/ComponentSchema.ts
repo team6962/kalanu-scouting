@@ -30,7 +30,7 @@ export enum ComponentSchemaType {
 	 */
 	ComboBox = 'combobox',
 	/**
-     * represents a button. displayed as all the buttons!
+	 * represents a multiple-choice combobox. displayed as the ones in report setup.
 	 */
 	Button = 'button'
 }
