@@ -50,8 +50,8 @@ const evalView: ViewSchema = {
 		},
 		{
 			type: ComponentSchemaType.Toggle,
-			name: 'consistently passing',
-			id: 'pass'
+			name: 'passing',
+			id: 'passing'
 		},
 		{
 			type: ComponentSchemaType.Toggle,
@@ -65,7 +65,7 @@ const evalView: ViewSchema = {
 		}
 	],
 
-	layout: [['parked', 'unstable', 'pass'], ['notes']],
+	layout: [['parked', 'unstable', 'passing'], ['notes']],
 	options: {
 		showTimer: false,
 		showUndo: false
@@ -74,7 +74,7 @@ const evalView: ViewSchema = {
 
 export const Model2023: ModelSchema = {
 	id: 'kalanu23',
-	version: '2.2.5',
+	version: '2.2.6',
 
 	flows: [
 		{
@@ -183,7 +183,7 @@ export const Model2023: ModelSchema = {
 				components: [
 					{
 						type: ComponentSchemaType.LongText,
-						id: 'jank',
+						id: 'Jank',
 						name: 'jankiest part?'
 					},
 					{
@@ -200,13 +200,20 @@ export const Model2023: ModelSchema = {
 						type: ComponentSchemaType.LongText,
 						id: 'Notes',
 						name: 'notes?'
+					},
+					{
+						type: ComponentSchemaType.Button,
+						id: 'Image',
+						name: 'robot photo form'
 					}
 				],
 				layout: [
-					['jank'],
+					['Jank'],
 					['PreferredAuto'],
 					['PreferredPickup'],
-					['Notes']
+					['Notes'],
+					['Image']
+
 				],
 				options: {
 					showTimer: false,
