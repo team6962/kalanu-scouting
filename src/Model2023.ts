@@ -45,7 +45,7 @@ const evalView: ViewSchema = {
 	components: [
 		{
 			type: ComponentSchemaType.Toggle,
-			name: 'parked',
+			name: 'broken',
 			id: 'parked'
 		},
 		{
@@ -59,13 +59,18 @@ const evalView: ViewSchema = {
 			id: 'unstable'
 		},
 		{
+			type: ComponentSchemaType.Toggle,
+			name: 'can defend',
+			id: 'defend'
+		},
+		{
 			type: ComponentSchemaType.LongText,
 			name: 'notes',
 			id: 'notes'
 		}
 	],
 
-	layout: [['parked', 'unstable', 'passing'], ['notes']],
+	layout: [['parked', 'unstable', 'passing', 'defend'], ['notes']],
 	options: {
 		showTimer: false,
 		showUndo: false
@@ -102,42 +107,6 @@ export const Model2023: ModelSchema = {
 							
 						},
 						{
-							type: ComponentSchemaType.Event,
-							name: 'trap',
-							id: 'trap',
-							eventId: 'trap',
-							disabled: { $not: [currentlyHanging] }
-						},
-						{
-							type: ComponentSchemaType.Event,
-							name: {
-								$cond: {
-									if: currentlyHanging,
-									then: 'hanging',
-									else: 'hang'
-								}
-							},
-							id: 'hang',
-							eventId: 'hung',
-							disabled: {
-								$or: [
-									{
-										$ne: ['$$phase', 'teleop']
-									},
-									currentlyHanging
-								]
-							}
-						},
-						{
-							type: ComponentSchemaType.Toggle,
-							id: 'leave',
-							name: 'leave',
-							disabled: {
-								$ne: ['$$phase', 'auton']
-							}
-						},
-
-						{
 							type: ComponentSchemaType.StaticText,
 							id: 'timesScored',
 							value: {
@@ -147,7 +116,6 @@ export const Model2023: ModelSchema = {
 					],
 					layout: [
 						['amp', 'speaker'],
-						['leave', 'hang', 'trap'],
 						['timesScored']
 					],
 					options: {

@@ -58,8 +58,7 @@ const processCounts = (events: ViewEvent[]) => {
 	let speakerAuton = 0;
 	let ampTeleop = 0;
 	let speakerTeleop = 0;
-	let trap = 0;
-	let hung = false;
+
 
 	for (const event of events) {
 		if (event.id === "amp" && event.phase === "auton")
@@ -70,14 +69,10 @@ const processCounts = (events: ViewEvent[]) => {
 			ampTeleop++;
 		else if (event.id === "speaker" && event.phase === "teleop")
 			speakerTeleop++;
-		else if (event.id === "trap")
-			trap++;
-		else if (event.id === "hung")
-			hung = true;
 
 	}
 
-	return { 'ampAuton': ampAuton, 'speakerAuton': speakerAuton, 'ampTeleop': ampTeleop, 'speakerTeleop': speakerTeleop, 'trap': trap, 'hung': hung };
+	return { 'ampAuton': ampAuton, 'speakerAuton': speakerAuton, 'ampTeleop': ampTeleop, 'speakerTeleop': speakerTeleop};
 };
 
 export const Report: React.FC = () => {
@@ -140,8 +135,6 @@ export const Report: React.FC = () => {
 		report.speakerAuton = processCounts(report.events!)['speakerAuton']
 		report.ampTeleop = processCounts(report.events!)['ampTeleop']
 		report.speakerTeleop = processCounts(report.events!)['speakerTeleop']
-		report.trap = processCounts(report.events!)['trap']
-		report.hung = processCounts(report.events!)['hung']
 
 		setReports([...reports, report as ReportState]);
 	};
