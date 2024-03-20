@@ -60,7 +60,7 @@ const evalView: ViewSchema = {
 		},
 		{
 			type: ComponentSchemaType.Toggle,
-			name: 'can defend',
+			name: 'defending',
 			id: 'defend'
 		},
 		{
